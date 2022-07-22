@@ -1,5 +1,5 @@
 # Social-Media-App-Group-5
-Jangan Push ke master langsung ya man teman
+Jangan Push ke main langsung ya man teman
 
 
 push nya ke branch deploymen aja... biar dimaster code yang udah jln aja di deploy
