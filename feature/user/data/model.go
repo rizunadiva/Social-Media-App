@@ -8,8 +8,9 @@ import (
 
 type User struct {
 	gorm.Model
-	Username string `json:"username" form:"username" validate:"required,username"`
-	Password string `json:"password" form:"email" validate:"required"`
+	Username string `json:"username" form:"username" validate:"required"`
+	Email    string `json:"email" form:"email" validate:"required,email"`
+	Password string `json:"password" form:"password" validate:"required"`
 	FullName string `json:"fullname" form:"fullname" validate:"required"`
 	Photo    string `json:"image_url"`
 	// News     []data.News `gorm:"foreignKey:By"`
