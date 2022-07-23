@@ -27,8 +27,9 @@ func (ud *userData) Insert(newUser domain.User) (domain.User, error) {
 
 	return cnv.ToModel(), nil
 }
-func (ud *userData) Login(email string, password string) (token string, nama string, id int, err error)
-func (ud *userData) GetSpecific(userID int) (domain.User, error)
-func (ud *userData) Update(userID int, updatedData domain.User) domain.User
-func (ud *userData) Delete(userID int) (row int, err error)
-func (ud *userData) GetAll() ([]domain.User, error)
+
+// func (ud *userData) Login(email string, password string) (token string, nama string, id int, err error){}
+// func (ud *userData) GetSpecific(userID int) (domain.User, error)
+// func (ud *userData) Update(userID int, updatedData domain.User) domain.User
+// func (ud *userData) Delete(userID int) (row int, err error)
+// func (ud *userData) GetAll() ([]domain.User, error)

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"socialmedia-app/config"
+	"socialmedia-app/factory"
 	"socialmedia-app/infrastruktur/database/mysql"
 
 	"github.com/labstack/echo/v4"

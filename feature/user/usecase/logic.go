@@ -46,8 +46,9 @@ func (ud *userUseCase) AddUser(newUser domain.User) (domain.User, error) {
 	}
 	return inserted, nil
 }
-func (ud *userUseCase) LoginUser(email string, password string) (token string, nama string, id int, err error)
-func (ud *userUseCase) GetAll() ([]domain.User, error)
-func (ud *userUseCase) GetProfile(id int) (domain.User, error)
-func (ud *userUseCase) UpdateUser(id int, updateProfile domain.User) domain.User
-func (ud *userUseCase) DeleteUser(id int) (row int, err error)
+
+// func (ud *userUseCase) LoginUser(email string, password string) (token string, nama string, id int, err error)
+// func (ud *userUseCase) GetAll() ([]domain.User, error)
+// func (ud *userUseCase) GetProfile(id int) (domain.User, error)
+// func (ud *userUseCase) UpdateUser(id int, updateProfile domain.User) domain.User
+// func (ud *userUseCase) DeleteUser(id int) (row int, err error)

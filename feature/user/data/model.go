@@ -9,7 +9,7 @@ import (
 type User struct {
 	gorm.Model
 	Username string `json:"username" form:"username" validate:"required"`
-	Email    string `json:"email" form:"email" validate:"required,email"`
+	Email    string `json:"email" form:"email" validate:"required"`
 	Password string `json:"password" form:"password" validate:"required"`
 	FullName string `json:"fullname" form:"fullname" validate:"required"`
 	Photo    string `json:"image_url"`
@@ -20,6 +20,7 @@ func (u *User) ToModel() domain.User {
 	return domain.User{
 		ID:        int(u.ID),
 		UserName:  u.Username,
+		Email:     u.Email,
 		Password:  u.Password,
 		FullName:  u.FullName,
 		Photo:     u.Photo,
@@ -41,6 +42,7 @@ func ParseToArr(arr []User) []domain.User {
 func FromModel(data domain.User) User {
 	var res User
 	res.Username = data.UserName
+	res.Email = data.Email
 	res.Password = data.Password
 	res.FullName = data.FullName
 	res.Photo = data.Photo
