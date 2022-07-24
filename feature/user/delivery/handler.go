@@ -23,6 +23,8 @@ func New(e *echo.Echo, us domain.UserUseCase) {
 	e.POST("/users", handler.InsertUser())
 	e.POST("/login", handler.LogUser())
 	e.GET("/profile", handler.GetProfile(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))
+	e.DELETE("/users", handler.DeleteUser(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))
+	e.PUT("/users", handler.UpdateUser(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))
 }
 
 func (uh *userHandler) InsertUser() echo.HandlerFunc {
@@ -88,6 +90,70 @@ func (uh *userHandler) GetProfile() echo.HandlerFunc {
 		}
 		return c.JSON(http.StatusFound, map[string]interface{}{
 			"message": "data found",
+			"data":    data,
+		})
+	}
+}
+
+func (uh *userHandler) DeleteUser() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := common.ExtractData(c)
+		if id == 0 {
+			return c.JSON(http.StatusUnauthorized, "Unauthorized")
+		}
+		_, errDel := uh.userUsecase.DeleteUser(id)
+		if errDel != nil {
+			return c.JSON(http.StatusInternalServerError, "cannot delete user")
+		}
+		return c.JSON(http.StatusOK, "success to delete user")
+	}
+}
+
+func (uh *userHandler) UpdateUser() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		// param := c.Param("id")
+		// cnv, err := strconv.Atoi(param)
+		// if err != nil {
+		// 	log.Println("Cannot convert to int", err.Error())
+		// 	return c.JSON(http.StatusInternalServerError, "cannot convert id")
+		// }
+
+		var tmp InsertFormat
+		// var idUpdate int
+		result := c.Bind(&tmp)
+
+		qry := map[string]interface{}{}
+		idUpdate := common.ExtractData(c)
+
+		if result != nil {
+			log.Println(result, "Cannot parse input to object")
+			return c.JSON(http.StatusInternalServerError, "Error read update")
+		}
+
+		if tmp.UserName != "" {
+			qry["username"] = tmp.UserName
+		}
+		if tmp.FullName != "" {
+			qry["fullname"] = tmp.FullName
+		}
+		if tmp.Email != "" {
+			qry["email"] = tmp.Email
+		}
+		if tmp.Password != "" {
+			qry["password"] = tmp.Password
+		}
+		if tmp.Photo != "" {
+			qry["photo"] = tmp.Photo
+		}
+		data, err := uh.userUsecase.UpdateUser(idUpdate, tmp.ToModel())
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, "cannot update")
+		}
+
+		return c.JSON(http.StatusCreated, map[string]interface{}{
+			"message": "Success update data",
 			"data":    data,
 		})
 	}

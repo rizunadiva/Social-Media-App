@@ -47,6 +47,30 @@ func (ud *userUseCase) AddUser(newUser domain.User) (domain.User, error) {
 	}
 	return inserted, nil
 }
+func (ud *userUseCase) UpdateUser(id int, updateProfile domain.User) (domain.User, error) {
+	// if updateProfile.Email == "" || updateProfile.Password == "" || updateProfile.UserName == "" || updateProfile.FullName == "" || updateProfile.Photo == "" {
+	// 	return -1, errors.New("all input data must be filled")
+	// }
+	// row, err = ud.userData.Update(id, updateProfile)
+	// return row, err
+
+	if id == -1 {
+		return domain.User{}, errors.New("invalid user")
+	}
+	hashed, err := bcrypt.GenerateFromPassword([]byte(updateProfile.Password), bcrypt.DefaultCost)
+
+	if err != nil {
+		log.Println("error encrypt password", err)
+		return domain.User{}, err
+	}
+	updateProfile.Password = string(hashed)
+	result := ud.userData.Update(id, updateProfile)
+
+	if result.ID == 0 {
+		return domain.User{}, errors.New("error update user")
+	}
+	return result, nil
+}
 
 func (ud *userUseCase) LoginUser(userLogin domain.User) (response int, data domain.User, err error) {
 	response, data, err = ud.userData.Login(userLogin)
@@ -69,7 +93,15 @@ func (ud *userUseCase) GetProfile(id int) (domain.User, error) {
 	return data, nil
 }
 
-// func (ud *userUseCase) GetAll() ([]domain.User, error)
-// func (ud *userUseCase) GetProfile(id int) (domain.User, error)
-// func (ud *userUseCase) UpdateUser(id int, updateProfile domain.User) domain.User
-// func (ud *userUseCase) DeleteUser(id int) (row int, err error)
+func (ud *userUseCase) DeleteUser(id int) (row int, err error) {
+	row, err = ud.userData.Delete(id)
+	if err != nil {
+		log.Println("delete usecase error", err.Error())
+		if err == gorm.ErrRecordNotFound {
+			return row, errors.New("data not found")
+		} else {
+			return row, errors.New("server error")
+		}
+	}
+	return row, nil
+}
