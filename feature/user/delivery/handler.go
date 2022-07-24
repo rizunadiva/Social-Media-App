@@ -44,3 +44,22 @@ func (uh *userHandler) InsertUser() echo.HandlerFunc {
 		})
 	}
 }
+
+func (uh *userHandler) LogUser() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var userLogin InsertFormat
+		err := c.Bind(&userLogin)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, "email or password incorrect")
+		}
+		data, e := uh.userUsecase.LoginUser(userLogin.ToModel())
+		if e != nil {
+			return c.JSON(http.StatusBadRequest, "email or password incorrect")
+		}
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success login",
+			"data":    data,
+			"token":   common.GenerateToken(data.ID),
+		})
+	}
+}
