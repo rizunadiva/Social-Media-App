@@ -53,6 +53,17 @@ func (ud *userData) Login(userLogin domain.User) (row int, data domain.User, err
 	return int(result.RowsAffected), dataUser.ToModel(), nil
 }
 
+func (ud *userData) GetSpecific(userID int) (domain.User, error) {
+	var tmp User
+	err := ud.db.Where("ID = ?", userID).First(&tmp).Error
+	if err != nil {
+		log.Println("There is a problem with data", err.Error())
+		return domain.User{}, err
+	}
+
+	return tmp.ToModel(), nil
+}
+
 // func (ud *userData) GetSpecific(userID int) (domain.User, error)
 // func (ud *userData) Update(userID int, updatedData domain.User) domain.User
 // func (ud *userData) Delete(userID int) (row int, err error)
