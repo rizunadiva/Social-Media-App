@@ -6,6 +6,7 @@ import (
 	"socialmedia-app/config"
 	"socialmedia-app/domain"
 	"socialmedia-app/feature/common"
+	"strconv"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -23,6 +24,8 @@ func New(e *echo.Echo, us domain.UserUseCase) {
 	e.POST("/users", handler.InsertUser())
 	e.POST("/login", handler.LogUser())
 	e.GET("/profile", handler.GetProfile(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))
+	e.DELETE("/users", handler.DeleteUser(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))
+	e.PUT("/users", handler.UpdateUser(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))
 }
 
 func (uh *userHandler) InsertUser() echo.HandlerFunc {
@@ -90,5 +93,49 @@ func (uh *userHandler) GetProfile() echo.HandlerFunc {
 			"message": "data found",
 			"data":    data,
 		})
+	}
+}
+
+func (uh *userHandler) DeleteUser() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := common.ExtractData(c)
+		if id == 0 {
+			return c.JSON(http.StatusUnauthorized, "Unauthorized")
+		}
+		_, errDel := uh.userUsecase.DeleteUser(id)
+		if errDel != nil {
+			return c.JSON(http.StatusInternalServerError, "cannot delete user")
+		}
+		return c.JSON(http.StatusOK, "success to delete user")
+	}
+}
+
+func (uh *userHandler) UpdateUser() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		param := c.Param("id")
+		cnv, err := strconv.Atoi(param)
+		if err != nil {
+			log.Println("Cannot convert to int", err.Error())
+			return c.JSON(http.StatusInternalServerError, "cannot convert id")
+		}
+
+		var tmp InsertFormat
+		err = c.Bind(&tmp)
+		if err != nil {
+			log.Println("Cannot parse input to object", err.Error())
+			return c.JSON(http.StatusInternalServerError, "Error dari server")
+		}
+
+		data := uh.userUsecase.UpdateUser(cnv, tmp.ToModel())
+
+		if data.ID == 0 {
+			return c.JSON(http.StatusInternalServerError, "cannot update")
+		}
+		res := map[string]interface{}{
+			"message": "Success update data",
+			"data":    data,
+		}
+		return c.JSON(http.StatusOK, res)
 	}
 }

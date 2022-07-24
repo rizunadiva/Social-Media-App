@@ -64,7 +64,27 @@ func (ud *userData) GetSpecific(userID int) (domain.User, error) {
 	return tmp.ToModel(), nil
 }
 
-// func (ud *userData) GetSpecific(userID int) (domain.User, error)
-// func (ud *userData) Update(userID int, updatedData domain.User) domain.User
-// func (ud *userData) Delete(userID int) (row int, err error)
-// func (ud *userData) GetAll() ([]domain.User, error)
+func (ud *userData) Delete(userID int) (row int, err error) {
+	res := ud.db.Delete(&User{}, userID)
+	if res.Error != nil {
+		log.Println("Cannot delete data", res.Error.Error())
+		return 0, res.Error
+	}
+
+	if res.RowsAffected < 1 {
+		log.Println("No data deleted", res.Error.Error())
+		return 0, fmt.Errorf("failed to delete user")
+	}
+	return int(res.RowsAffected), nil
+}
+
+func (ud *userData) Update(userID int, updatedData domain.User) domain.User {
+	var cnv = FromModel(updatedData)
+	err := ud.db.Model(&User{}).Where("ID = ?", userID).Updates(updatedData).Error
+	if err != nil {
+		log.Println("Cannot update data", err.Error())
+		return domain.User{}
+	}
+	updatedData.ID = userID
+	return cnv.ToModel()
+}
