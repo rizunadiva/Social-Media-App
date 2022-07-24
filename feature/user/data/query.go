@@ -1,9 +1,11 @@
 package data
 
 import (
+	"fmt"
 	"log"
 	"socialmedia-app/domain"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -28,14 +30,27 @@ func (ud *userData) Insert(newUser domain.User) (domain.User, error) {
 	return cnv.ToModel(), nil
 }
 
-func (ud *userData) Login(userLogin domain.User) (domain.User, error) {
+func (ud *userData) Login(userLogin domain.User) (row int, data domain.User, err error) {
 	var dataUser = FromModel(userLogin)
-	err := ud.db.Where("email = ?", dataUser.Email).First(&dataUser).Error
-	if err != nil {
-		log.Println("Cannot login", err.Error())
-		return domain.User{}, err
+	password := dataUser.Password
+
+	result := ud.db.Where("email = ?", dataUser.Email).First(&dataUser)
+
+	if result.Error != nil {
+		return 0, domain.User{}, result.Error
 	}
-	return dataUser.ToModel(), nil
+
+	if result.RowsAffected != 1 {
+		return -1, domain.User{}, fmt.Errorf("failed to login")
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(dataUser.Password), []byte(password))
+
+	if err != nil {
+		return -2, domain.User{}, fmt.Errorf("failed to login")
+	}
+
+	return int(result.RowsAffected), dataUser.ToModel(), nil
 }
 
 // func (ud *userData) GetSpecific(userID int) (domain.User, error)

@@ -2,9 +2,7 @@ package usecase
 
 import (
 	"errors"
-	"fmt"
 	"log"
-	_bcrypt "socialmedia-app/bcrypt"
 	"socialmedia-app/domain"
 	"socialmedia-app/feature/user/data"
 
@@ -49,31 +47,10 @@ func (ud *userUseCase) AddUser(newUser domain.User) (domain.User, error) {
 	return inserted, nil
 }
 
-func (ud *userUseCase) LoginUser(userLogin domain.User) (domain.User, error) {
-	dataUser := data.User{}
-	// var newPassword string
-	check := _bcrypt.CheckPassword(userLogin.Password, dataUser.Password)
-	if !check {
-		return domain.User{}, fmt.Errorf("incorrect password")
-	}
+func (ud *userUseCase) LoginUser(userLogin domain.User) (response int, data domain.User, err error) {
+	response, data, err = ud.userData.Login(userLogin)
 
-	hash, err := bcrypt.GenerateFromPassword([]byte(userLogin.Password), bcrypt.DefaultCost)
-	if err != nil {
-		log.Println("error encrypt password", err)
-		return domain.User{}, err
-	}
-	dataUser.Password = string(hash)
-
-	var inserted domain.User
-	inserted, err = ud.userData.Login(userLogin)
-	if err != nil {
-		log.Println("error from usecase", err.Error())
-		return domain.User{}, err
-	}
-	if inserted.ID == 0 {
-		return domain.User{}, errors.New("cannot login")
-	}
-	return inserted, nil
+	return response, data, err
 }
 
 // func (ud *userUseCase) GetAll() ([]domain.User, error)
