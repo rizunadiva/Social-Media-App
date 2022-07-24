@@ -6,7 +6,6 @@ import (
 	"socialmedia-app/config"
 	"socialmedia-app/domain"
 	"socialmedia-app/feature/common"
-	"strconv"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -113,29 +112,37 @@ func (uh *userHandler) DeleteUser() echo.HandlerFunc {
 func (uh *userHandler) UpdateUser() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
-		param := c.Param("id")
-		cnv, err := strconv.Atoi(param)
-		if err != nil {
-			log.Println("Cannot convert to int", err.Error())
-			return c.JSON(http.StatusInternalServerError, "cannot convert id")
-		}
+		// param := c.Param("id")
+		// cnv, err := strconv.Atoi(param)
+		// if err != nil {
+		// 	log.Println("Cannot convert to int", err.Error())
+		// 	return c.JSON(http.StatusInternalServerError, "cannot convert id")
+		// }
 
 		var tmp InsertFormat
-		err = c.Bind(&tmp)
+		var idUpdate int
+		err := c.Bind(&tmp)
 		if err != nil {
 			log.Println("Cannot parse input to object", err.Error())
 			return c.JSON(http.StatusInternalServerError, "Error dari server")
 		}
 
-		data := uh.userUsecase.UpdateUser(cnv, tmp.ToModel())
+		data, err := uh.userUsecase.UpdateUser(idUpdate, tmp.ToModel())
 
-		if data.ID == 0 {
+		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "cannot update")
 		}
-		res := map[string]interface{}{
+		if data == 0 {
+			return c.JSON(http.StatusInternalServerError, "failed to update data")
+		}
+		if data == -1 {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"message": err.Error(),
+			})
+		}
+		return c.JSON(http.StatusCreated, map[string]interface{}{
 			"message": "Success update data",
 			"data":    data,
-		}
-		return c.JSON(http.StatusOK, res)
+		})
 	}
 }

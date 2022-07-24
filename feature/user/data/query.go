@@ -29,6 +29,17 @@ func (ud *userData) Insert(newUser domain.User) (domain.User, error) {
 
 	return cnv.ToModel(), nil
 }
+func (ud *userData) Update(userID int, updatedData domain.User) (int, error) {
+	var cnv = FromModel(updatedData)
+	result := ud.db.Model(&User{}).Where("ID = ?", userID).Updates(cnv)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return 0, fmt.Errorf("failed to update data")
+	}
+	return int(result.RowsAffected), nil
+}
 
 func (ud *userData) Login(userLogin domain.User) (row int, data domain.User, err error) {
 	var dataUser = FromModel(userLogin)
@@ -76,15 +87,4 @@ func (ud *userData) Delete(userID int) (row int, err error) {
 		return 0, fmt.Errorf("failed to delete user")
 	}
 	return int(res.RowsAffected), nil
-}
-
-func (ud *userData) Update(userID int, updatedData domain.User) domain.User {
-	var cnv = FromModel(updatedData)
-	err := ud.db.Model(&User{}).Where("ID = ?", userID).Updates(updatedData).Error
-	if err != nil {
-		log.Println("Cannot update data", err.Error())
-		return domain.User{}
-	}
-	updatedData.ID = userID
-	return cnv.ToModel()
 }

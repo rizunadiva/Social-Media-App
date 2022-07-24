@@ -47,6 +47,13 @@ func (ud *userUseCase) AddUser(newUser domain.User) (domain.User, error) {
 	}
 	return inserted, nil
 }
+func (ud *userUseCase) UpdateUser(id int, updateProfile domain.User) (row int, err error) {
+	if updateProfile.Email == "" || updateProfile.Password == "" || updateProfile.UserName == "" || updateProfile.FullName == "" || updateProfile.Photo == "" {
+		return -1, errors.New("all input data must be filled")
+	}
+	row, err = ud.userData.Update(id, updateProfile)
+	return row, err
+}
 
 func (ud *userUseCase) LoginUser(userLogin domain.User) (response int, data domain.User, err error) {
 	response, data, err = ud.userData.Login(userLogin)
@@ -80,29 +87,4 @@ func (ud *userUseCase) DeleteUser(id int) (row int, err error) {
 		}
 	}
 	return row, nil
-}
-
-func (ud *userUseCase) UpdateUser(id int, updateProfile domain.User) domain.User {
-	oldData, errOld := ud.userData.GetSpecific(id)
-	if errOld != nil {
-		return domain.User{}
-	}
-	if updateProfile.Email == "" {
-		updateProfile.Email = oldData.Email
-	}
-	if updateProfile.FullName == "" {
-		updateProfile.FullName = oldData.FullName
-	}
-
-	if updateProfile.Password == "" {
-		updateProfile.Password = oldData.Password
-	}
-	if updateProfile.UserName == "" {
-		updateProfile.UserName = oldData.UserName
-	}
-	if updateProfile.Photo == "" {
-		updateProfile.Photo = oldData.Photo
-	}
-	data := ud.userData.Update(id, updateProfile)
-	return data
 }
