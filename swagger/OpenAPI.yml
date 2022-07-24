@@ -691,7 +691,89 @@ paths:
                   value: {
                     message: "all input data must be filled",
                   }
-
+  /Comment/{id}:
+    get:
+      tags:
+        - comment
+      description: Get comment by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: number
+            example: 1
+          description: id comment
+      responses:
+        '200':
+          description: Success Response get a comment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseCommentSuccess'
+              examples:
+                responseData1:
+                  description: response success 1
+                  value: {
+                    message: "success",
+                    data: {
+                      id: 1,
+                        content: "Pantai Keren nih Guys",
+                        created_at: "2022-07-24T18:35:01.231Z",
+                      user: {
+                        id_user: 2,
+                        user_name: "AntonyStarr"
+                      },
+                      news: {
+                        id_news: 2
+                      }
+                    }
+                  }
+        '400':
+          description: Failed Response
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    message: "Bad Request",
+                  }
+    delete:
+      tags:
+        - comment
+      description: Delete by id comment
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id_comment
+          required: true
+          schema:
+            type: number
+            example: 1
+          description: id_comment
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response success 1
+                  value: {
+                    message: "success delete data",
+                  }
+        '400':
+          description: Failed Response
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    message: "Bad Request",
+                  }
 components:
   securitySchemes:
     JWTAuth:
@@ -741,6 +823,18 @@ components:
           type: string
           minLength: 1
           
+    responseRegistrasiSuccess:
+      type: object
+      properties: {
+        
+        "message": {
+          type: string
+        },
+        "data":{
+          type: object
+        }
+      }
+
     responseGetUserSuccess:
       type: object
       properties: {
@@ -791,7 +885,6 @@ components:
     responseAllNewsuccess:
       type: object
       properties: {
-
         "message": {
           type: string
           },
