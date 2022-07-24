@@ -29,16 +29,15 @@ func (ud *userData) Insert(newUser domain.User) (domain.User, error) {
 
 	return cnv.ToModel(), nil
 }
-func (ud *userData) Update(userID int, updatedData domain.User) (int, error) {
+func (ud *userData) Update(userID int, updatedData domain.User) domain.User {
 	var cnv = FromModel(updatedData)
-	result := ud.db.Model(&User{}).Where("ID = ?", userID).Updates(cnv)
-	if result.Error != nil {
-		return 0, result.Error
+	err := ud.db.Model(&User{}).Where("ID = ?", userID).Updates(cnv).Error
+	if err != nil {
+		log.Println("Cannot update data", err.Error())
+		return domain.User{}
 	}
-	if result.RowsAffected == 0 {
-		return 0, fmt.Errorf("failed to update data")
-	}
-	return int(result.RowsAffected), nil
+	cnv.ID = uint(userID)
+	return cnv.ToModel()
 }
 
 func (ud *userData) Login(userLogin domain.User) (row int, data domain.User, err error) {

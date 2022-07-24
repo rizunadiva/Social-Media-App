@@ -47,12 +47,29 @@ func (ud *userUseCase) AddUser(newUser domain.User) (domain.User, error) {
 	}
 	return inserted, nil
 }
-func (ud *userUseCase) UpdateUser(id int, updateProfile domain.User) (row int, err error) {
-	if updateProfile.Email == "" || updateProfile.Password == "" || updateProfile.UserName == "" || updateProfile.FullName == "" || updateProfile.Photo == "" {
-		return -1, errors.New("all input data must be filled")
+func (ud *userUseCase) UpdateUser(id int, updateProfile domain.User) (domain.User, error) {
+	// if updateProfile.Email == "" || updateProfile.Password == "" || updateProfile.UserName == "" || updateProfile.FullName == "" || updateProfile.Photo == "" {
+	// 	return -1, errors.New("all input data must be filled")
+	// }
+	// row, err = ud.userData.Update(id, updateProfile)
+	// return row, err
+
+	if id == -1 {
+		return domain.User{}, errors.New("invalid user")
 	}
-	row, err = ud.userData.Update(id, updateProfile)
-	return row, err
+	hashed, err := bcrypt.GenerateFromPassword([]byte(updateProfile.Password), bcrypt.DefaultCost)
+
+	if err != nil {
+		log.Println("error encrypt password", err)
+		return domain.User{}, err
+	}
+	updateProfile.Password = string(hashed)
+	result := ud.userData.Update(id, updateProfile)
+
+	if result.ID == 0 {
+		return domain.User{}, errors.New("error update user")
+	}
+	return result, nil
 }
 
 func (ud *userUseCase) LoginUser(userLogin domain.User) (response int, data domain.User, err error) {

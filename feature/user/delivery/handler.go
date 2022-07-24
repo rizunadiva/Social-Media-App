@@ -120,26 +120,38 @@ func (uh *userHandler) UpdateUser() echo.HandlerFunc {
 		// }
 
 		var tmp InsertFormat
-		var idUpdate int
-		err := c.Bind(&tmp)
-		if err != nil {
-			log.Println("Cannot parse input to object", err.Error())
-			return c.JSON(http.StatusInternalServerError, "Error dari server")
+		// var idUpdate int
+		result := c.Bind(&tmp)
+
+		qry := map[string]interface{}{}
+		idUpdate := common.ExtractData(c)
+
+		if result != nil {
+			log.Println(result, "Cannot parse input to object")
+			return c.JSON(http.StatusInternalServerError, "Error read update")
 		}
 
+		if tmp.UserName != "" {
+			qry["username"] = tmp.UserName
+		}
+		if tmp.FullName != "" {
+			qry["fullname"] = tmp.FullName
+		}
+		if tmp.Email != "" {
+			qry["email"] = tmp.Email
+		}
+		if tmp.Password != "" {
+			qry["password"] = tmp.Password
+		}
+		if tmp.Photo != "" {
+			qry["photo"] = tmp.Photo
+		}
 		data, err := uh.userUsecase.UpdateUser(idUpdate, tmp.ToModel())
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "cannot update")
 		}
-		if data == 0 {
-			return c.JSON(http.StatusInternalServerError, "failed to update data")
-		}
-		if data == -1 {
-			return c.JSON(http.StatusBadRequest, map[string]interface{}{
-				"message": err.Error(),
-			})
-		}
+
 		return c.JSON(http.StatusCreated, map[string]interface{}{
 			"message": "Success update data",
 			"data":    data,
