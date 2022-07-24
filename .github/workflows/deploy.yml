@@ -1,0 +1,25 @@
+name: Deploy to AWS EC2
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing deploy to server using remote ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          # port: ${{ secrets.PORT }}
+          port: 22
+          script: |
+            cd /home/Alta-Project2-Group5
+            git pull origin main
+            docker stop project2Container
+            docker rm project2Container
+            docker build -t project2-images:latest .
+            docker run -d -p 80:5000 -e DB_Username=${{ secrets.DB_USERNAME }} -e DB_Password=${{ secrets.DB_PASSWORD }} -e DB_Port=${{ secrets.DB_PORT }} -e DB_Host=${{ secrets.DB_HOST }} -e DB_Name=${{ secrets.DB_NAME }} --name project2Container project2-images:latest
