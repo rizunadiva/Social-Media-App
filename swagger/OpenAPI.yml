@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Sosial Media
-  description: Sosial Media APP with Golang and React
+  description: Sosial Media APP with Golang and React JS
   contact:
     name: Group5
     email: sos@gmail.com
