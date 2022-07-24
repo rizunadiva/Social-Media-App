@@ -7,6 +7,7 @@ import (
 
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func GenerateToken(ID int) string {
@@ -34,4 +35,11 @@ func ExtractData(c echo.Context) int {
 		return int(parseID)
 	}
 	return -1
+}
+
+func UseJWT(secret []byte) middleware.JWTConfig {
+	return middleware.JWTConfig{
+		SigningMethod: middleware.AlgorithmHS256,
+		SigningKey:    secret,
+	}
 }

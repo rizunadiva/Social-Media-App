@@ -3,10 +3,13 @@ package delivery
 import (
 	"log"
 	"net/http"
+	"socialmedia-app/config"
 	"socialmedia-app/domain"
 	"socialmedia-app/feature/common"
+	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type userHandler struct {
@@ -19,6 +22,7 @@ func New(e *echo.Echo, us domain.UserUseCase) {
 	}
 	e.POST("/users", handler.InsertUser())
 	e.POST("/login", handler.LogUser())
+	e.GET("/profile", handler.GetProfile(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))
 }
 
 func (uh *userHandler) InsertUser() echo.HandlerFunc {
@@ -65,6 +69,26 @@ func (uh *userHandler) LogUser() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "success login",
 			"token":   common.GenerateToken(data.ID),
+		})
+	}
+}
+
+func (uh *userHandler) GetProfile() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := common.ExtractData(c)
+
+		data, err := uh.userUsecase.GetProfile(id)
+
+		if err != nil {
+			if strings.Contains(err.Error(), "not found") {
+				return c.JSON(http.StatusNotFound, err.Error())
+			} else {
+				return c.JSON(http.StatusInternalServerError, err.Error())
+			}
+		}
+		return c.JSON(http.StatusFound, map[string]interface{}{
+			"message": "data found",
+			"data":    data,
 		})
 	}
 }

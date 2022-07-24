@@ -8,6 +8,7 @@ import (
 
 	validator "github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 type userUseCase struct {
@@ -51,6 +52,21 @@ func (ud *userUseCase) LoginUser(userLogin domain.User) (response int, data doma
 	response, data, err = ud.userData.Login(userLogin)
 
 	return response, data, err
+}
+
+func (ud *userUseCase) GetProfile(id int) (domain.User, error) {
+	data, err := ud.userData.GetSpecific(id)
+
+	if err != nil {
+		log.Println("Use case", err.Error())
+		if err == gorm.ErrRecordNotFound {
+			return domain.User{}, errors.New("data not found")
+		} else {
+			return domain.User{}, errors.New("server error")
+		}
+	}
+
+	return data, nil
 }
 
 // func (ud *userUseCase) GetAll() ([]domain.User, error)
