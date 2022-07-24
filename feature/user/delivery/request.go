@@ -19,3 +19,15 @@ func (i *InsertFormat) ToModel() domain.User {
 		Photo:    i.Photo,
 	}
 }
+
+type LoginFormat struct {
+	Email    string `json:"email" form:"email"`
+	Password string `json:"password" form:"password"`
+}
+
+func (lf *LoginFormat) LoginToModel() domain.User {
+	return domain.User{
+		Email:    lf.Email,
+		Password: lf.Password,
+	}
+}
