@@ -9,7 +9,7 @@ import (
 type News struct {
 	gorm.Model
 	ID             int
-	Conten         string
+	Content        string
 	Images         string
 	FileAttachment string
 	CreatedAt      time.Time
