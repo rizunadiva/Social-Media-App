@@ -54,6 +54,7 @@ paths:
                   description: response success 1
                   value: {
                     message: "Login Success",
+                    code : 200,
                     data: {
                       "user_id": 1,
                       "user_name": "jungkook",
@@ -85,11 +86,73 @@ paths:
                     "data": null
                   }
   /users:
+    get:
+      tags:
+        - Users
+      summary: for get All User
+      description: Bisa diaplikasikan ketika user ingin melihat profil
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+            example: 1
+          description: username
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseGetUserSuccess'
+              examples:
+                responseData1:
+                  description: response success 1
+                  value: {        
+                    message: "success",
+                    code : 200,
+                    data: {
+                      "id": 1,
+                      "username": "antoniobanderas",
+                      "email": "antoniobanderas@gmail.com",
+                      "alamat": "Jln. Baru Bangun No.7, Jakarta - Indonesia",
+                      "notelp": "081223455432",
+                      "created_at": "2022-07-22T05:56:50.248Z",
+                      "image_url": "server/antonio.jpg"
+                    }
+                  }
+        '400':
+          description: Failed Response
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: Failed Response
+                  value: {
+                    message: "Bad Request",
+                    code : 400,
+                    data : null
+                  }
+        '500':
+          description: Internal Server error
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: Internal Server error
+                  value: {
+                    message: "Server Error",
+                    code : 500,
+                    data : null
+                  }
     post:
       tags:
         - Users
       summary: Registration User
-      description: Saat registrasi user harus input semua field
+      description: Fitur Registrasi User
       requestBody:
         content:
           multipart/form-data:
@@ -124,12 +187,8 @@ paths:
                   description: response success 1
                   value: {
                     message: "success to insert data",
+                    code : 200,
                     token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
-                  }
-                responseData2:
-                  description: response success 2
-                  value: {
-                    message: "success to insert data",
                   }
         '400':
           description: Failed Response
@@ -140,80 +199,34 @@ paths:
                   description: response failed 1
                   value: {
                     message: "all input data must be filled",
+                    code : 400,
                   }
-                responseData2:
-                  description: response failed 2
-                  value: {
-                    message: "all input data must be filled",
-                  }
-  /users/{iduser}:
-    get:
-      tags:
-        - Users
-      summary: for get User By Id
-      description: Bisa diaplikasikan ketika user ingin melihat profilnya
-      security:
-        - JWTAuth: []
-      parameters:
-        - in: path
-          name: iduser
-          required: true
-          schema:
-            type: number
-            example: 1
-          description: user_id
-      responses:
-        '200':
-          description: Success Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/responseGetUserSuccess'
-              examples:
-                responseData1:
-                  description: response success 1
-                  value: {        
-                    message: "success",
-                    data: {
-                      "id": 1,
-                      "username": "antoniobanderas",
-                      "email": "antoniobanderas@gmail.com",
-                      "alamat": "Jln. Baru Bangun No.7, Jakarta - Indonesia",
-                      "notelp": "081223455432",
-                      "created_at": "2022-07-22T05:56:50.248Z",
-                      "image_url": "server/antonio.jpg"
-                    }
-                  }
-        '400':
+        '500':
           description: Failed Response
           content:
-            application/json:
+            multipart/form-data:
               examples:
                 responseData1:
-                  description: response success 1
+                  description: Internal Server Error
                   value: {
-                    message: "Bad Request",
-                  }
-                responseData2:
-                  description: response success 2
-                  value: {
-                    message: "Bad Request",
+                    message: "Internal Server Error",
+                    code : 500,
                   }
     put:
       tags:
         - Users
-      summary: for put User By Id
-      description: Bisa diaplikasikan ketika user ingin update profilnya & semua field tidak boleh kosong
+      summary: Update data user
+      description: Update data user berdasarkan id 
       security:
         - JWTAuth: []     
       parameters:
         - in: path
-          name: iduser
+          name: id
           required: true
           schema:
             type: number
             example: 1
-          description: user_id
+          description: iduser
       requestBody:
         content:
           multipart/form-data:
@@ -250,11 +263,7 @@ paths:
                   description: response success 1
                   value: {
                     message: "success to insert data",
-                  }
-                responseData2:
-                  description: response success 2
-                  value: {
-                    message: "success to insert data",
+                    code : 200,
                   }
         '400':
           description: Failed Response
@@ -262,14 +271,23 @@ paths:
             application/json:
               examples:
                 responseData1:
+                  description: Failed Response
+                  value: {
+                    message: "failed to update data",
+                    code : 400,
+                    data : null
+                  }
+        '500':
+          description: Internal server Error
+          content:
+            application/json:
+              examples:
+                responseData1:
                   description: response success 1
                   value: {
-                    message: "failed to update data",
-                  }
-                responseData2:
-                  description: response success 2
-                  value: {
-                    message: "failed to update data",
+                    message: "Internal server Error",
+                    code : 500,
+                    data : null
                   }
     delete:
       tags:
@@ -311,6 +329,20 @@ paths:
                   description: response failed 2
                   value: {
                     message: "Bad Request",
+                    code : 400,
+                    data : null
+                  }
+        '500':
+          description: Failed Response
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    message: "Bad Request",
+                    code : 500,
+                    data : null
                   }
   /News:
     get:
@@ -391,52 +423,6 @@ paths:
                   value: {
                     message: "all input data must be filled",
                   }
-  /News/{id}:
-    get:
-      tags:
-        - News
-      description: Get news by id
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: number
-            example: 1
-          description: id news
-      responses:
-        '200':
-          description: Success Response get a news
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/responseNewsuccess'
-              examples:
-                responseData1:
-                  description: response success 1
-                  value: {
-                    message: "success",
-                    data: {
-                      id: 1,
-                        content: "Hello guys... hari ini pada liburan kemana?? cek this out",
-                        created_at: "2022-07-26T18:35:01.231Z",
-                        image_url: "image/im.jpg",
-                      user: {
-                        id: 2,
-                        user_name: "AntonyStarr"
-                      }
-                    }
-                  }
-        '400':
-          description: Failed Response
-          content:
-            application/json:
-              examples:
-                responseData1:
-                  description: response failed 1
-                  value: {
-                    message: "Bad Request",
-                  }
     put:
       tags:
         - News
@@ -475,6 +461,8 @@ paths:
                   description: response success 1
                   value: {
                     message: "success update data",
+                    code : 200,
+                    data : null
                   }
         '400':
           description: Failed Response
@@ -485,7 +473,74 @@ paths:
                   description: response success 1
                   value: {
                     message: "Bad Request",
+                    code : 400,
+                    data : null
                   }
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response success 1
+                  value: {
+                    message: "Internal server error",
+                    code : 500,
+                    data : null
+                  }              
+  /News/{id}:
+    get:
+      tags:
+        - News
+      summary: ini fitur lihat news
+      description: Get news by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: number
+            example: 1
+          description: id news
+      responses:
+        '200':
+          description: Success Response get a news
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseNewsuccess'
+              examples:
+                responseData1:
+                  description: response success 1
+                  value: {
+                    message: "success",
+                    code : 200,
+                    data: {
+                      id: 1,
+                        content: "Hello guys... hari ini pada liburan kemana?? cek this out",
+                        created_at: "2022-07-26T18:35:01.231Z",
+                        image_url: "image/im.jpg",
+                      user: {
+                        id: 2,
+                        user_name: "AntonyStarr"
+                      },
+                      comment: [
+                        {id: 2, content: "Pantai guys",  created_at: "2022-07-26T22:35:01.231Z"},
+                        {id: 4, content: "Awasome...",  created_at: "2022-07-26T22:45:01.231Z"},
+                      ]
+                    }
+                  }
+        '400':
+          description: Failed Response
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    message: "Bad Request",
+                  }
+    
     delete:
       tags:
         - News
@@ -510,6 +565,7 @@ paths:
                   description: response success 1
                   value: {
                     message: "success delete data",
+                    code : 200
                   }
         '400':
           description: Failed Response
@@ -520,12 +576,26 @@ paths:
                   description: response failed 1
                   value: {
                     message: "Bad Request",
+                    code : 400,
+                    data : null
+                  }
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: Internal server error
+                  value: {
+                    message: "Internal server error",
+                    code : 500,
+                    data : null
                   }
   /News/users:
     get:
       tags:
         - News
-      description: Get News by id from token
+      description: Get News posting by certain user
       security:
         - JWTAuth: []
       responses:
@@ -540,11 +610,17 @@ paths:
                   description: response success 1
                   value: {
                     message: "success",
+                    code : 200,
                     data: {
-                      id: 1,
+                      [
+                      {id: 1,
                       content: "Hello guys... hari ini pada liburan kemana?? cek this out",
                       created_at: "2022-07-26T18:35:01.231Z",
-                      image_url": "image/im.jpg",
+                      image_url": "image/im.jpg"},
+                      {id: 5,
+                      content: "Amazing... summer is awasome",
+                      created_at: "2022-07-27T07:35:01.231Z",
+                      image_url": "image/m3.jpg"}],
                       user: {
                         id: 2,
                         user_name: "AntonyStarr"
@@ -560,6 +636,20 @@ paths:
                   description: response failed 1
                   value: {
                     message: "Bad Request",
+                    code : 400,
+                    data : null
+                  }
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: Internal Server Error
+                  value: {
+                    message: "Internal Server Error",
+                    code : 500,
+                    data : null
                   }
   /Comment:
     get:
@@ -578,18 +668,28 @@ paths:
                   description: response success 1
                   value: {
                     message: "success",
+                    code : 200,
                     data: [{
                       id: 1,
                       content: "Hello guys... hari ini pada liburan kemana?? cek this out",
                       created_at: "2022-07-26T18:35:01.231Z",
-                      "image_url": "image/im.jpg",
                       user: {
                         id: 2,
                         user_name: "AntonyStarr"
                       }
-                    }]
+                    },
+                    {
+                      id: 4,
+                      content: "Here we go...",
+                      created_at: "2022-07-26T18:35:01.231Z",
+                      user: {
+                        id: 3,
+                        user_name: "Bucher"
+                      }
+                    }
+                    ]
                   }
-        '500':
+        '400':
           description: Cannot get all Comment
           content:
             application/json:
@@ -598,6 +698,20 @@ paths:
                   description: response failed 1
                   value: {
                     "message" : "failed to get all data",
+                    code : 400,
+                    data : null
+                  }
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    "message" : "Internal Server Error",
+                    code : 500,
+                    data : null
                   }
     post:
       tags:
@@ -629,6 +743,7 @@ paths:
                   description: response success 1
                   value: {
                     message: "success to insert news",
+                    code : 200,
                   }
         '400':
           description: Failed Response
@@ -639,11 +754,23 @@ paths:
                   description: response failed 1
                   value: {
                     message: "all input data must be filled",
+                    data : null
+                  }
+        '500':
+          description: Failed Response
+          content:
+            multipart/form-data:
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    message: "Internal Server Error",
+                    data : null
                   }
     delete:
       tags:
         - Comment
-      description: Add new Comment
+      description: Delete Comment
       security:
         - JWTAuth: []
       requestBody:
@@ -684,7 +811,7 @@ paths:
   /Comment/{id}:
     get:
       tags:
-        - comment
+      - Comment
       description: Get comment by id
       parameters:
         - in: path
@@ -728,10 +855,11 @@ paths:
                   description: response failed 1
                   value: {
                     message: "Bad Request",
+                    data : null
                   }
     delete:
       tags:
-        - comment
+        - Comment
       description: Delete by id comment
       security:
         - JWTAuth: []
@@ -753,6 +881,7 @@ paths:
                   description: response success 1
                   value: {
                     message: "success delete data",
+                    code : 200,
                   }
         '400':
           description: Failed Response
@@ -763,6 +892,20 @@ paths:
                   description: response failed 1
                   value: {
                     message: "Bad Request",
+                    code : 400,
+                    data : null
+                  }
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    message: "Internal server error",
+                    code : 500,
+                    data : null
                   }
 components:
   securitySchemes:
