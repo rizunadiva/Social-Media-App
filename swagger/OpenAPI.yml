@@ -40,14 +40,14 @@ paths:
               userData1:
                 description: "Example data  user 1"
                 value: {
-                  user_name: "antoniobanderas",
-                  password: "An43ddz"
+                  email: "jungkook@gmail.com",
+                  password: "jung123"
                 }
               userData2:
                 description: "Example data  user 2"
                 value: {
-                  user_name: "AntonyStarr",
-                  password: "Homelander666"
+                  email: "eunwoo@gmail.com",
+                  password: "eun123"
                 }
       responses:
         '200':
@@ -64,7 +64,7 @@ paths:
                     message: "Login Success",
                     data: {
                       "user_id": 1,
-                      "user_name": "antoniobanderas",
+                      "user_name": "jungkook",
                       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
                     }
                   }
@@ -74,7 +74,7 @@ paths:
                     "message": "Login Success",
                     "data": {
                       user_id: 2,
-                      user_name: "AntonyStarr",
+                      user_name: "eunwoo",
                       token: "AyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
                     }
                   }
@@ -86,12 +86,12 @@ paths:
                 responseData1:
                   description: response failed 1
                   value: {
-                    message: "username or password incorrect"
+                    message: "email or password incorrect"
                   }
                 responseData2:
                   description: response failed 2
                   value: {
-                    message: "username or password incorrect"
+                    message: "email or password incorrect"
                   }
   /users:
     post:
@@ -108,22 +108,20 @@ paths:
               userData1:
                 description: "Example data  user 1"
                 value: {
-                  username: "antoniobanderas",
-                  email: "antoniobanderas@gmail.com",
-                  password: "An43ddz",
-                  alamat: "Jln. Baru Bangun No.7, Jakarta - Indonesia",
-                  notelp: "081223455432",
-                  file: antonio.jpg
+                  username: "jungkook",
+                  email: "jungkook@gmail.com",
+                  password: "jung123",
+                  fullname: "jungkook btw",
+                  photo: jungkook.jpg
                 }
               userData2:
                 description: "Example data  user 2"
                 value: {
-                  username: "AntonyStarr",
-                  email: "homelander@gmail.com",
-                  password: "Homelander666",
-                  alamat: "Jln. Lama No.5, Jakarta - Indonesia",
-                  notelp: "081278901234",
-                  file: starr.jpg
+                  username: "eunwoo",
+                  email: "eunwoo@gmail.com",
+                  password: "eun123",
+                  fullname: "cha eun woo",
+                  photo: eunwoo.jpg
                 }
       responses:
         '200':
@@ -135,6 +133,7 @@ paths:
                   description: response success 1
                   value: {
                     message: "success to insert data",
+                    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
                   }
                 responseData2:
                   description: response success 2
