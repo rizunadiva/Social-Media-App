@@ -154,12 +154,6 @@ paths:
                     code : 200,
                     token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
                   }
-                responseData2:
-                  description: response success 2
-                  value: {
-                    message: "success to insert data",
-                    code : 200,
-                  }
         '400':
           description: Failed Response
           content:
@@ -171,11 +165,16 @@ paths:
                     message: "all input data must be filled",
                     code : 400,
                   }
-                responseData2:
-                  description: response failed 2
+        '500':
+          description: Failed Response
+          content:
+            multipart/form-data:
+              examples:
+                responseData1:
+                  description: Internal Server Error
                   value: {
-                    message: "all input data must be filled",
-                    code : 400,
+                    message: "Internal Server Error",
+                    code : 500,
                   }
   /users/{username}:
     get:
@@ -222,26 +221,24 @@ paths:
             application/json:
               examples:
                 responseData1:
-                  description: response success 1
-                  value: {
-                    message: "Bad Request",
-                    code : 400,
-                    data : null
-                  }
-                responseData2:
-                  description: response success 2
+                  description: Failed Response
                   value: {
                     message: "Bad Request",
                     code : 400,
                     data : null
                   }
         '500':
-          description: Internal server Error
+          description: Internal Server error
           content:
             application/json:
-              schema:
-                type: string
-              example: '{"code":500,"message":"There is an error in internal server"}'
+              examples:
+                responseData1:
+                  description: Internal Server error
+                  value: {
+                    message: "Server Error",
+                    code : 500,
+                    data : null
+                  }
     put:
       tags:
         - Users
@@ -295,28 +292,17 @@ paths:
                     message: "success to insert data",
                     code : 200,
                   }
-                responseData2:
-                  description: response success 2
-                  value: {
-                    message: "success to insert data",
-                    code : 200,
-                  }
         '400':
           description: Failed Response
           content:
             application/json:
               examples:
                 responseData1:
-                  description: response success 1
+                  description: Failed Response
                   value: {
                     message: "failed to update data",
                     code : 400,
-                  }
-                responseData2:
-                  description: response success 2
-                  value: {
-                    message: "failed to update data",
-                    code : 400,
+                    data : null
                   }
         '500':
           description: Internal server Error
@@ -325,13 +311,6 @@ paths:
               examples:
                 responseData1:
                   description: response success 1
-                  value: {
-                    message: "Internal server Error",
-                    code : 500,
-                    data : null
-                  }
-                responseData2:
-                  description: response success 2
                   value: {
                     message: "Internal server Error",
                     code : 500,
@@ -377,6 +356,20 @@ paths:
                   description: response failed 2
                   value: {
                     message: "Bad Request",
+                    code : 400,
+                    data : null
+                  }
+        '500':
+          description: Failed Response
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    message: "Bad Request",
+                    code : 500,
+                    data : null
                   }
   /News:
     get:
@@ -548,6 +541,7 @@ paths:
                   value: {
                     message: "success update data",
                     code : 200,
+                    data : null
                   }
         '400':
           description: Failed Response
@@ -559,6 +553,7 @@ paths:
                   value: {
                     message: "Bad Request",
                     code : 400,
+                    data : null
                   }
         '500':
           description: Internal server error
@@ -570,6 +565,7 @@ paths:
                   value: {
                     message: "Internal server error",
                     code : 500,
+                    data : null
                   }
     delete:
       tags:
@@ -606,7 +602,8 @@ paths:
                   description: response failed 1
                   value: {
                     message: "Bad Request",
-                    code : 400
+                    code : 400,
+                    data : null
                   }
         '500':
           description: Internal server error
@@ -617,7 +614,8 @@ paths:
                   description: Internal server error
                   value: {
                     message: "Internal server error",
-                    code : 500
+                    code : 500,
+                    data : null
                   }
   /News/users:
     get:
@@ -701,14 +699,23 @@ paths:
                       id: 1,
                       content: "Hello guys... hari ini pada liburan kemana?? cek this out",
                       created_at: "2022-07-26T18:35:01.231Z",
-                      "image_url": "image/im.jpg",
                       user: {
                         id: 2,
                         user_name: "AntonyStarr"
                       }
-                    }]
+                    },
+                    {
+                      id: 4,
+                      content: "Here we go...",
+                      created_at: "2022-07-26T18:35:01.231Z",
+                      user: {
+                        id: 3,
+                        user_name: "Bucher"
+                      }
+                    }
+                    ]
                   }
-        '500':
+        '400':
           description: Cannot get all Comment
           content:
             application/json:
@@ -717,6 +724,20 @@ paths:
                   description: response failed 1
                   value: {
                     "message" : "failed to get all data",
+                    code : 400,
+                    data : null
+                  }
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    "message" : "Internal Server Error",
+                    code : 500,
+                    data : null
                   }
     post:
       tags:
@@ -748,6 +769,7 @@ paths:
                   description: response success 1
                   value: {
                     message: "success to insert news",
+                    code : 200,
                   }
         '400':
           description: Failed Response
@@ -758,6 +780,18 @@ paths:
                   description: response failed 1
                   value: {
                     message: "all input data must be filled",
+                    data : null
+                  }
+        '500':
+          description: Failed Response
+          content:
+            multipart/form-data:
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    message: "Internal Server Error",
+                    data : null
                   }
     delete:
       tags:
@@ -847,6 +881,7 @@ paths:
                   description: response failed 1
                   value: {
                     message: "Bad Request",
+                    data : null
                   }
     delete:
       tags:
@@ -872,6 +907,7 @@ paths:
                   description: response success 1
                   value: {
                     message: "success delete data",
+                    code : 200,
                   }
         '400':
           description: Failed Response
@@ -882,6 +918,20 @@ paths:
                   description: response failed 1
                   value: {
                     message: "Bad Request",
+                    code : 400,
+                    data : null
+                  }
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    message: "Internal server error",
+                    code : 500,
+                    data : null
                   }
 components:
   securitySchemes:
