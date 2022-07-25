@@ -668,7 +668,7 @@ paths:
     delete:
       tags:
         - Comment
-      description: Add new Comment
+      description: Delete Comment
       security:
         - JWTAuth: []
       requestBody:
@@ -709,7 +709,7 @@ paths:
   /Comment/{id}:
     get:
       tags:
-        - comment
+      - Comment
       description: Get comment by id
       parameters:
         - in: path
@@ -756,7 +756,7 @@ paths:
                   }
     delete:
       tags:
-        - comment
+        - Comment
       description: Delete by id comment
       security:
         - JWTAuth: []
