@@ -1,14 +1,14 @@
 openapi: 3.0.3
 info:
+  version: 1.0.0
   title: Sosial Media
   description: Sosial Media APP with Golang and React JS
   contact:
     name: Group5
-    email: sos@gmail.com
+    email: message@gmail.com
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
-  version: '1.0.0'
 servers:
   - description: SwaggerHub API Auto Mocking
     url: https://app.swaggerhub.com/apis/GolangProject/SosialMedia/1.0.1
@@ -16,19 +16,18 @@ servers:
     description: requestMethod
 tags:
   - name: Auth
-    description: Layanan untuk authentikasi user
+    description: User Data Management
   - name: Users
-    description: Layanan yang mengorganisir data user
+    description: Organizing Data User
   - name: News
-    description: Layanan yang mengorganisir data News
+    description: Oragnizing Data News
   - name: Comment
-    description: Layanan yang mengorganisir Comment
-
+    description: Oragnizing Data Comment
 paths:
   /login:
     post:
       tags:
-        - Auth
+      - Auth
       summary: login user
       description: Login user bisa digunakan ketika user sudah registrasi
       requestBody:
@@ -43,24 +42,17 @@ paths:
                   email: "jungkook@gmail.com",
                   password: "jung123"
                 }
-              userData2:
-                description: "Example data  user 2"
-                value: {
-                  username: "eunwoo@gmail.com",
-                  password: "eun123"
-                }
       responses:
-        '200':
+        "200":
           description: Success Response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/responseLoginSuccess'
-              examples:
+              example:
                 responseData1:
                   description: response success 1
                   value: {
-              
                     message: "Login Success",
                     data: {
                       "user_id": 1,
@@ -68,30 +60,13 @@ paths:
                       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
                     }
                   }
-                responseData2:
-                  description: response success 2
-                  value: {
-                    "message": "Login Success",
-                    "data": {
-                      user_id: 2,
-                      user_name: "eunwoo",
-                      token: "AyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
-                    }
-                  }
-        '400':
+        "400":
           description: Failed Response
           content:
             application/json:
               examples:
                 responseData1:
                   description: response failed 1
-                  value: {
-                    "code" : 400,
-                    "message": "email or password incorrect",
-                    "data": null
-                  }
-                responseData2:
-                  description: response failed 2
                   value: {
                     "code" : 400,
                     "message": "email or password incorrect",
