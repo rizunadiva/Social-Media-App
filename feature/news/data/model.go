@@ -9,37 +9,35 @@ import (
 
 type News struct {
 	gorm.Model
-	ID             int
-	Content        string `json:"content" form:"content" validate:"required"`
-	Images         string `json:"image_url" form:"Images"`
-	FileAttachment string `json:"File" form:"File"`
+	Content        string `json:"content" form:"content"`
+	Images         string `json:"images" form:"images"`
+	FileAttachment string `json:"file" form:"file"`
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
 }
 
-func (u *News) ToModel() domain.News {
+func (b *News) ToDomain() domain.News {
 	return domain.News{
-		ID:             int(u.ID),
-		Content:        u.Content,
-		Images:         u.Images,
-		FileAttachment: u.FileAttachment,
-		CreatedAt:      u.CreatedAt,
-		UpdatedAt:      u.UpdatedAt,
+		ID:             int(b.ID),
+		Content:        b.Content,
+		Images:         b.Images,
+		FileAttachment: b.FileAttachment,
 	}
 }
 
-func ParseToArr(arr []News) []domain.News {
+func ParseToArrDomain(arr []News) []domain.News {
 	var res []domain.News
 
 	for _, val := range arr {
-		res = append(res, val.ToModel())
+		res = append(res, val.ToDomain())
 	}
 
 	return res
 }
 
-func FromModel(data domain.News) News {
+func ToLocal(data domain.News) News {
 	var res News
+	res.ID = uint(data.ID)
 	res.Content = data.Content
 	res.Images = data.Images
 	res.FileAttachment = data.FileAttachment

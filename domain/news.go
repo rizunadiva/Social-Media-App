@@ -9,12 +9,13 @@ import (
 
 type News struct {
 	gorm.Model
-	IDNews         int
+	ID             int
 	Content        string
 	Images         string
 	FileAttachment string
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
+	Pemilik        int
 }
 
 type newsHandler interface {
@@ -26,11 +27,11 @@ type newsHandler interface {
 }
 
 type NewsUseCase interface {
-	GetAllM() ([]News, error)
-	GetMyM(IDUser int) ([]News, error)
-	AddBook(IDUser int, newNews News) (News, error)
-	DelBook(IDNews int) (bool, error)
-	UpBook(IDNews int, updateData News) (News, error)
+	GetAllN() ([]News, error)
+	GetMyN(IDUser int) ([]News, error)
+	AddNews(IDUser int, newNews News) (News, error)
+	DelNews(IDNews int) (bool, error)
+	UpNews(IDNews int, updateData News) (News, error)
 }
 
 type NewsData interface {
