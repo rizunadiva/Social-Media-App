@@ -16,13 +16,13 @@ servers:
     description: requestMethod
 tags:
   - name: Auth
-    description: Authentication
+    description: Layanan untuk authentikasi user
   - name: Users
-    description: User data management
+    description: Layanan yang mengorganisir data user
   - name: News
-    description: News management
+    description: Layanan yang mengorganisir data News
   - name: Comment
-    description: Comment Management
+    description: Layanan yang mengorganisir Comment
 
 paths:
   /login:
@@ -46,7 +46,7 @@ paths:
               userData2:
                 description: "Example data  user 2"
                 value: {
-                  email: "eunwoo@gmail.com",
+                  username: "eunwoo@gmail.com",
                   password: "eun123"
                 }
       responses:
@@ -86,12 +86,28 @@ paths:
                 responseData1:
                   description: response failed 1
                   value: {
-                    message: "email or password incorrect"
+                    "code" : 400,
+                    "message": "email or password incorrect",
+                    "data": null
                   }
                 responseData2:
                   description: response failed 2
                   value: {
-                    message: "email or password incorrect"
+                    "code" : 400,
+                    "message": "email or password incorrect",
+                    "data": null
+                  }
+        '500':
+          description: Internal server Error
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    "code" : 500,
+                    "message": "Internal server Error",
+                    "data": null
                   }
   /users:
     post:
