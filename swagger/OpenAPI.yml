@@ -116,7 +116,7 @@ paths:
       tags:
         - Users
       summary: Registration User
-      description: Saat registrasi user harus input semua field
+      description: Fitur Registrasi User
       requestBody:
         content:
           multipart/form-data:
@@ -151,6 +151,7 @@ paths:
                   description: response success 1
                   value: {
                     message: "success to insert data",
+                    code : 200,
                     token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
                   }
                 responseData2:
@@ -168,6 +169,7 @@ paths:
                   description: response failed 1
                   value: {
                     message: "all input data must be filled",
+                    code : 400,
                   }
                 responseData2:
                   description: response failed 2
@@ -175,22 +177,22 @@ paths:
                     message: "all input data must be filled",
                     code : 400,
                   }
-  /users/{iduser}:
+  /users/{username}:
     get:
       tags:
         - Users
-      summary: for get User By Id
-      description: Bisa diaplikasikan ketika user ingin melihat profilnya
+      summary: for get User By username
+      description: Bisa diaplikasikan ketika user ingin melihat profil
       security:
         - JWTAuth: []
       parameters:
         - in: path
-          name: iduser
+          name: username
           required: true
           schema:
-            type: number
+            type: string
             example: 1
-          description: user_id
+          description: username
       responses:
         '200':
           description: Success Response
@@ -203,6 +205,7 @@ paths:
                   description: response success 1
                   value: {        
                     message: "success",
+                    code : 200,
                     data: {
                       "id": 1,
                       "username": "antoniobanderas",
@@ -222,27 +225,38 @@ paths:
                   description: response success 1
                   value: {
                     message: "Bad Request",
+                    code : 400,
+                    data : null
                   }
                 responseData2:
                   description: response success 2
                   value: {
                     message: "Bad Request",
+                    code : 400,
+                    data : null
                   }
+        '500':
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example: '{"code":500,"message":"There is an error in internal server"}'
     put:
       tags:
         - Users
-      summary: for put User By Id
-      description: Bisa diaplikasikan ketika user ingin update profilnya & semua field tidak boleh kosong
+      summary: Update data user
+      description: Update data user berdasarkan id 
       security:
         - JWTAuth: []     
       parameters:
         - in: path
-          name: iduser
+          name: id
           required: true
           schema:
             type: number
             example: 1
-          description: user_id
+          description: iduser
       requestBody:
         content:
           multipart/form-data:
@@ -279,11 +293,13 @@ paths:
                   description: response success 1
                   value: {
                     message: "success to insert data",
+                    code : 200,
                   }
                 responseData2:
                   description: response success 2
                   value: {
                     message: "success to insert data",
+                    code : 200,
                   }
         '400':
           description: Failed Response
@@ -294,11 +310,32 @@ paths:
                   description: response success 1
                   value: {
                     message: "failed to update data",
+                    code : 400,
                   }
                 responseData2:
                   description: response success 2
                   value: {
                     message: "failed to update data",
+                    code : 400,
+                  }
+        '500':
+          description: Internal server Error
+          content:
+            application/json:
+              examples:
+                responseData1:
+                  description: response success 1
+                  value: {
+                    message: "Internal server Error",
+                    code : 500,
+                    data : null
+                  }
+                responseData2:
+                  description: response success 2
+                  value: {
+                    message: "Internal server Error",
+                    code : 500,
+                    data : null
                   }
     delete:
       tags:
