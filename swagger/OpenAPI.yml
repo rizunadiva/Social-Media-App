@@ -60,8 +60,8 @@ paths:
                 responseData1:
                   description: response success 1
                   value: {
-              
                     message: "Login Success",
+                    code : 200,
                     data: {
                       "user_id": 1,
                       "user_name": "jungkook",
@@ -69,13 +69,15 @@ paths:
                     }
                   }
                 responseData2:
-                  description: response success 2
+                  description: response success 2,
                   value: {
                     "message": "Login Success",
+                    "code" : 200,
                     "data": {
                       user_id: 2,
                       user_name: "eunwoo",
-                      token: "AyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
+                      token: "AyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co",
+                      
                     }
                   }
         '400':
@@ -155,6 +157,7 @@ paths:
                   description: response success 2
                   value: {
                     message: "success to insert data",
+                    code : 200,
                   }
         '400':
           description: Failed Response
@@ -170,6 +173,7 @@ paths:
                   description: response failed 2
                   value: {
                     message: "all input data must be filled",
+                    code : 400,
                   }
   /users/{iduser}:
     get:
