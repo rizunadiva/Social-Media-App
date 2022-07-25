@@ -18,7 +18,7 @@ type News struct {
 	Pemilik        int
 }
 
-type newsHandler interface {
+type NewsHandler interface {
 	InsertNews() echo.HandlerFunc
 	DeleteNews() echo.HandlerFunc
 	UpdateNews() echo.HandlerFunc
