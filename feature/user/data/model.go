@@ -2,18 +2,19 @@ package data
 
 import (
 	"socialmedia-app/domain"
+	"socialmedia-app/feature/news/data"
 
 	"gorm.io/gorm"
 )
 
 type User struct {
 	gorm.Model
-	Username string `json:"username" form:"username" validate:"required"`
-	Email    string `gorm:"unique" json:"email" form:"email" validate:"required"`
-	Password string `json:"password" form:"password" validate:"required"`
-	FullName string `json:"fullname" form:"fullname" validate:"required"`
-	Photo    string `json:"image_url"`
-	// News     []data.News `gorm:"foreignKey:By"`
+	Username string      `json:"username" form:"username" validate:"required"`
+	Email    string      `gorm:"unique" json:"email" form:"email" validate:"required"`
+	Password string      `json:"password" form:"password" validate:"required"`
+	FullName string      `json:"fullname" form:"fullname" validate:"required"`
+	Photo    string      `json:"image_url"`
+	News     []data.News `gorm:"foreignKey:By"`
 }
 
 func (u *User) ToModel() domain.User {

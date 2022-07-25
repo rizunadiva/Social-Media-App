@@ -2,7 +2,6 @@ package data
 
 import (
 	"socialmedia-app/domain"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -12,8 +11,14 @@ type News struct {
 	Content        string `json:"content" form:"content"`
 	Images         string `json:"images" form:"images"`
 	FileAttachment string `json:"file" form:"file"`
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
+	UserID         uint
+	User           User
+}
+type User struct {
+	gorm.Model
+	Username string `json:"username" form:"username" validate:"required"`
+	Email    string `gorm:"unique" json:"email" form:"email" validate:"required"`
+	News     []News
 }
 
 func (b *News) ToDomain() domain.News {
@@ -22,6 +27,13 @@ func (b *News) ToDomain() domain.News {
 		Content:        b.Content,
 		Images:         b.Images,
 		FileAttachment: b.FileAttachment,
+		CreatedAt:      b.CreatedAt,
+		UpdatedAt:      b.UpdatedAt,
+		Pemilik: domain.User{
+			ID:       int(b.User.ID),
+			UserName: b.User.Username,
+			Email:    b.User.Email,
+		},
 	}
 }
 
@@ -38,6 +50,7 @@ func ParseToArrDomain(arr []News) []domain.News {
 func ToLocal(data domain.News) News {
 	var res News
 	res.ID = uint(data.ID)
+	res.UserID = uint(data.Pemilik.ID)
 	res.Content = data.Content
 	res.Images = data.Images
 	res.FileAttachment = data.FileAttachment
