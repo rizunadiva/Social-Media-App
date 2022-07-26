@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo"
 )
 
 type newsHandler struct {
@@ -141,7 +141,6 @@ func (nh *newsHandler) UpdateNews() echo.HandlerFunc {
 
 		return c.JSON(http.StatusCreated, map[string]interface{}{
 			"message": "success update data",
-			// "data": data,
 			"ID":      data.ID,
 			"Content": data.Content,
 			"Images":  data.Images,
