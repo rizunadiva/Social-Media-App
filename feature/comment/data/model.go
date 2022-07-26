@@ -6,39 +6,36 @@ import (
 	"gorm.io/gorm"
 )
 
-type News struct {
+type Comments struct {
 	gorm.Model
-	Content        string `json:"content" form:"content"`
-	Images         string `json:"images" form:"images"`
-	FileAttachment string `json:"file" form:"file"`
-	UserID         uint
-	User           User
+	Content string `json:"content" form:"content"`
+	UserID  uint
+	User    User
 }
+
 type User struct {
 	gorm.Model
 	Username string `json:"username" form:"username" validate:"required"`
 	Email    string `gorm:"unique" json:"email" form:"email" validate:"required"`
-	News     []News
+	Comments []Comments
 }
 
-func (b *News) ToDomain() domain.News {
-	return domain.News{
-		ID:             int(b.ID),
-		Content:        b.Content,
-		Images:         b.Images,
-		FileAttachment: b.FileAttachment,
-		CreatedAt:      b.CreatedAt,
-		UpdatedAt:      b.UpdatedAt,
+func (c *Comments) ToDomain() domain.Comments {
+	return domain.Comments{
+		ID:        int(c.ID),
+		Content:   c.Content,
+		CreatedAt: c.CreatedAt,
+		UpdatedAt: c.UpdatedAt,
 		Pemilik: domain.User{
-			ID:       int(b.User.ID),
-			UserName: b.User.Username,
-			Email:    b.User.Email,
+			ID:       int(c.User.ID),
+			UserName: c.User.Username,
+			Email:    c.User.Email,
 		},
 	}
 }
 
-func ParseToArrDomain(arr []News) []domain.News {
-	var res []domain.News
+func ParseToArrDomain(arr []Comments) []domain.Comments {
+	var res []domain.Comments
 
 	for _, val := range arr {
 		res = append(res, val.ToDomain())
@@ -47,12 +44,10 @@ func ParseToArrDomain(arr []News) []domain.News {
 	return res
 }
 
-func ToLocal(data domain.News) News {
-	var res News
+func ToLocal(data domain.Comments) Comments {
+	var res Comments
 	res.ID = uint(data.ID)
 	res.UserID = uint(data.Pemilik.ID)
 	res.Content = data.Content
-	res.Images = data.Images
-	res.FileAttachment = data.FileAttachment
 	return res
 }
