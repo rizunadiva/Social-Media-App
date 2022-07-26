@@ -35,5 +35,5 @@ type CommentsData interface {
 	GetMy(IDUser int) []Comments
 	Insert(newComments Comments) Comments
 	Delete(IDComments int) bool
-	Update(IDComments int, updatedComments Comments) Comments
+	// Update(IDComments int, updatedComments Comments) Comments
 }
