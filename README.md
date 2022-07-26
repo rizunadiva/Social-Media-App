@@ -81,12 +81,10 @@ Comment merupakan fitur dimana user dapat memberikan comment/komentar pada event
 
 </details>
 
-<!-- IMAGES -->
-### 🖼&nbsp;Images
 
 <details>
 <summary>📈&nbsp;ERD</summary>
-<img src="">
+<img src="https://github.com/rizunadiva/Social-Media-App-Group-5/blob/deployment/erd/erd.jpg">
 </details>
 
 <!-- CONTACT -->
