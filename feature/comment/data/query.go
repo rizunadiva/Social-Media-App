@@ -63,14 +63,3 @@ func (nd *newsData) Delete(newsID int) bool {
 	}
 	return true
 }
-
-func (bd *newsData) Update(newsID int, updatedNews domain.News) domain.News {
-	cnv := ToLocal(updatedNews)
-	err := bd.db.Model(&cnv).Where("ID = ?", newsID).Updates(updatedNews)
-	if err.Error != nil {
-		log.Println("Cannot update data", err.Error.Error())
-		return domain.News{}
-	}
-	cnv.ID = uint(newsID)
-	return cnv.ToDomain()
-}
