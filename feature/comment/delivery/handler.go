@@ -8,22 +8,22 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo"
 )
 
-type newsHandler struct {
-	newsUsecase domain.NewsUseCase
+type commentsHandler struct {
+	commentsUsecase domain.CommentsUseCase
 }
 
-func New(nu domain.NewsUseCase) domain.NewsHandler {
-	return &newsHandler{
-		newsUsecase: nu,
+func New(cu domain.CommentsUseCase) domain.CommentsHandler {
+	return &commentsHandler{
+		commentsUsecase: cu,
 	}
 }
 
-func (nh *newsHandler) InsertNews() echo.HandlerFunc {
+func (cu *commentsHandler) InsertComments() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var tmp NewsInsertRequest
+		var tmp commentsInsertRequest
 		err := c.Bind(&tmp)
 
 		if err != nil {
@@ -31,7 +31,7 @@ func (nh *newsHandler) InsertNews() echo.HandlerFunc {
 			c.JSON(http.StatusBadRequest, "error read input")
 		}
 
-		data, err := nh.newsUsecase.AddNews(common.ExtractData(c), tmp.ToDomain())
+		data, err := cu.commentsUsecase.AddComments(common.ExtractData(c), tmp.ToDomain())
 
 		if err != nil {
 			log.Println("Cannot proces data", err)
@@ -46,9 +46,9 @@ func (nh *newsHandler) InsertNews() echo.HandlerFunc {
 	}
 }
 
-func (nh *newsHandler) GetAllBook() echo.HandlerFunc {
+func (cu *commentsHandler) GetAllComments() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		data, err := nh.newsUsecase.GetAllN()
+		data, err := cu.commentsUsecase.GetAllC()
 
 		if err != nil {
 			log.Println("Cannot get data", err)
@@ -61,15 +61,15 @@ func (nh *newsHandler) GetAllBook() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message": "success get all news",
+			"message": "success get all Comments",
 			"users":   data,
 		})
 	}
 }
 
-func (bh *newsHandler) GetMyNews() echo.HandlerFunc {
+func (cu *commentsHandler) GetMyComments() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		data, err := bh.newsUsecase.GetMyN(common.ExtractData(c))
+		data, err := cu.commentsUsecase.GetMyC(common.ExtractData(c))
 
 		if err != nil {
 			log.Println("Cannot get data", err)
@@ -77,12 +77,12 @@ func (bh *newsHandler) GetMyNews() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message": "success get my news",
+			"message": "success get my comments",
 			"users":   data,
 		})
 	}
 }
-func (nh *newsHandler) DeleteNews() echo.HandlerFunc {
+func (cu *commentsHandler) DeleteComments() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		cnv, err := strconv.Atoi(c.Param("id"))
@@ -91,7 +91,7 @@ func (nh *newsHandler) DeleteNews() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, "cannot convert id")
 		}
 
-		data, err := nh.newsUsecase.DelNews(cnv)
+		data, err := cu.commentsUsecase.DelComments(cnv)
 
 		if err != nil {
 			if strings.Contains(err.Error(), "not found") {
@@ -106,7 +106,7 @@ func (nh *newsHandler) DeleteNews() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message": "success delete news",
+			"message": "success delete Comments",
 		})
 	}
 }

@@ -17,7 +17,7 @@ type Comments struct {
 type CommentsHandler interface {
 	InsertComments() echo.HandlerFunc
 	DeleteComments() echo.HandlerFunc
-	UpdateComments() echo.HandlerFunc
+	// UpdateComments() echo.HandlerFunc
 	GetAllComments() echo.HandlerFunc
 	GetMyComments() echo.HandlerFunc
 }
