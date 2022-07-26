@@ -1,7 +1,5 @@
 name: DOCKER
 
-#test ini dulu untuk deploy ke dockerhub, sebelum ke aws..
-
 # Controls when the workflow will run
 on:
   pull_request_target:
