@@ -90,11 +90,11 @@ Comment merupakan fitur dimana user dapat memberikan comment/komentar pada event
 <!-- CONTACT -->
 ### Contact
 
-[![Ahmad Reski]](https://github.com/reski-id)
+[[Ahmad Reski]](https://github.com/reski-id)
 
-[![Rizuana]](https://github.com/rizunadiva)
+[[Rizuana]](https://github.com/rizunadiva)
 
-[![Artby]](https://github.com/)
+[[Artby]](https://github.com/)
 
 
 <p align="center">:copyright: 2022 | Group 5</p>
