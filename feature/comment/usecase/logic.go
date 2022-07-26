@@ -61,16 +61,3 @@ func (nu *newsUseCase) DelNews(IDNews int) (bool, error) {
 
 	return true, nil
 }
-
-func (nu *newsUseCase) UpNews(IDNews int, updateData domain.News) (domain.News, error) {
-	if IDNews == -1 {
-		return domain.News{}, errors.New("invalid news")
-	}
-
-	res := nu.data.Update(IDNews, updateData)
-	if res.ID == 0 {
-		return domain.News{}, errors.New("error update news")
-	}
-
-	return res, nil
-}
