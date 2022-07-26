@@ -27,7 +27,7 @@ type CommentsUseCase interface {
 	GetMyC(IDUser int) ([]Comments, error)
 	AddComments(IDUser int, newComments Comments) (Comments, error)
 	DelComments(IDComments int) (bool, error)
-	UpComments(IDComments int, updateData Comments) (Comments, error)
+	// UpComments(IDComments int, updateData Comments) (Comments, error)
 }
 
 type CommentsData interface {

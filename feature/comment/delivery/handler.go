@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type commentsHandler struct {
