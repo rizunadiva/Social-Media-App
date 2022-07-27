@@ -7,7 +7,7 @@
   <h3 align="center">Project-2 "Sosial Media App"</h3>
 
   <p align="center">
-    Project ke 2 RESTful API menggunakan Bahasa Pemprograman Golang Echo dan Clean Architectures
+    Project ke 2 RESTful API menggunakan Framework Echo Golang dan Clean Architectures
     <br />
     <a href=""><strong>Kunjungi kami »</strong></a>
     <br />
