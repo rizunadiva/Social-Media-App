@@ -13,20 +13,27 @@ type News struct {
 	FileAttachment string
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
+	DeletedAt      time.Time
 	UserID         int
 	User           User
 }
 
 type NewsHandler interface {
 	InsertNews() echo.HandlerFunc
+	UpdateNews() echo.HandlerFunc
+	DeleteNews() echo.HandlerFunc
 }
 
 type NewsUseCase interface {
 	AddNews(IDUser int, useNews News) (News, error)
+	UpNews(IDNews int, updateData News) (News, error)
+	DelNews(IDNews int) (bool, error)
 }
 
 type NewsData interface {
 	Insert(insertNews News) News
+	Update(IDNews int, updatedNews News) News
+	Delete(IDNews int) bool
 }
 
 // type News struct {
@@ -42,8 +49,6 @@ type NewsData interface {
 
 // type NewsHandler interface {
 // 	InsertNews() echo.HandlerFunc
-// 	// 	DeleteNews() echo.HandlerFunc
-// 	// 	UpdateNews() echo.HandlerFunc
 // 	// 	GetAllNews() echo.HandlerFunc
 // 	// 	GetMyNews() echo.HandlerFunc
 // }
@@ -52,14 +57,10 @@ type NewsData interface {
 // 	AddNews(IDUser int, newNews News) (News, error)
 // 	GetAllN() ([]News, error)
 // 	// GetMyN(IDUser int) ([]News, error)
-// 	// DelNews(IDNews int) (bool, error)
-// 	// UpNews(IDNews int, updateData News) (News, error)
 // }
 
 // type NewsData interface {
 // 	Insert(newNews News) News
 // 	GetAll() []News
 // 	// GetMy(IDUser int) []News
-// 	// Delete(IDNews int) bool
-// 	// Update(IDNews int, updatedNews News) News
 // }

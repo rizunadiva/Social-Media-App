@@ -2,6 +2,9 @@ package data
 
 import (
 	"fmt"
+	"log"
+
+	// "log"
 	"socialmedia-app/domain"
 
 	"gorm.io/gorm"
@@ -29,6 +32,30 @@ func (nd *newsData) Insert(dataNews domain.News) domain.News {
 	return cnv.ToDomain()
 }
 
+func (bd *newsData) Update(newsID int, updatedNews domain.News) domain.News {
+	cnv := ToLocal(updatedNews)
+	err := bd.db.Model(cnv).Where("ID = ?", newsID).Updates(updatedNews)
+	if err.Error != nil {
+		log.Println("Cannot update data", err.Error.Error())
+		return domain.News{}
+	}
+	cnv.ID = uint(newsID)
+	return cnv.ToDomain()
+}
+
+func (nd *newsData) Delete(newsID int) bool {
+	err := nd.db.Where("ID = ?", newsID).Delete(&News{})
+	if err.Error != nil {
+		log.Println("Cannot delete data", err.Error.Error())
+		return false
+	}
+	if err.RowsAffected < 1 {
+		log.Println("No data deleted", err.Error.Error())
+		return false
+	}
+	return true
+}
+
 // func (nd *newsData) GetAll() []domain.News {
 // 	var data []News
 // 	err := nd.db.Find(&data)
@@ -50,28 +77,4 @@ func (nd *newsData) Insert(dataNews domain.News) domain.News {
 // 		return nil
 // 	}
 // 	return ParseToArrDomain(data)
-// }
-
-// func (nd *newsData) Delete(newsID int) bool {
-// 	err := nd.db.Where("ID = ?", newsID).Delete(&News{})
-// 	if err.Error != nil {
-// 		log.Println("Cannot delete data", err.Error.Error())
-// 		return false
-// 	}
-// 	if err.RowsAffected < 1 {
-// 		log.Println("No data deleted", err.Error.Error())
-// 		return false
-// 	}
-// 	return true
-// }
-
-// func (bd *newsData) Update(newsID int, updatedNews domain.News) domain.News {
-// 	cnv := ToLocal(updatedNews)
-// 	err := bd.db.Model(&cnv).Where("ID = ?", newsID).Updates(updatedNews)
-// 	if err.Error != nil {
-// 		log.Println("Cannot update data", err.Error.Error())
-// 		return domain.News{}
-// 	}
-// 	cnv.ID = uint(newsID)
-// 	return cnv.ToDomain()
 // }

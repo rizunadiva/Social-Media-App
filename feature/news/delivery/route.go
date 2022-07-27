@@ -13,4 +13,6 @@ import (
 
 func RouteBook(e *echo.Echo, bc domain.NewsHandler) {
 	e.POST("/news", bc.InsertNews(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))
+	e.PUT("/news/:id", bc.UpdateNews(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))
+	e.DELETE("/news/:id", bc.DeleteNews(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))
 }

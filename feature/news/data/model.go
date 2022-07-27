@@ -38,6 +38,7 @@ func (b *News) ToDomain() domain.News {
 		FileAttachment: b.FileAttachment,
 		CreatedAt:      b.CreatedAt,
 		UpdatedAt:      b.UpdatedAt,
+		// DeletedAt:      b.DeletedAt,
 		// PostedBy:       int(b.PostedBy),
 		UserID: int(b.UserID),
 		User: domain.User{
