@@ -4,8 +4,8 @@ import (
 	"socialmedia-app/config"
 	"socialmedia-app/domain"
 
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 func RouteNews(e *echo.Echo, nh domain.NewsHandler) {

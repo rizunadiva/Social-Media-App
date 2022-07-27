@@ -4,18 +4,16 @@ import (
 	"time"
 
 	"github.com/labstack/echo"
-	"gorm.io/gorm"
 )
 
 type News struct {
-	gorm.Model
 	ID             int
 	Content        string
 	Images         string
 	FileAttachment string
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
-	Pemilik        int
+	Pemilik        User
 }
 
 type NewsHandler interface {
