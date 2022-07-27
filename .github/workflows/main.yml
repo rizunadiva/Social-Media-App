@@ -4,7 +4,7 @@ name: CI_DOCKERHUB
 on:
   pull_request_target:
     types: ["closed"]
-    branches: [ "deployment" ]
+    branches: [ "main" ]
 
 jobs:
   docker:
