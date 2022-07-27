@@ -31,6 +31,30 @@ func (nu *newsUseCase) AddNews(IDUser int, newNews domain.News) (domain.News, er
 	return res, nil
 }
 
+func (nu *newsUseCase) UpNews(IDNews int, updateData domain.News) (domain.News, error) {
+	if IDNews == -1 {
+		return domain.News{}, errors.New("invalid news")
+	}
+
+	// updateData.UserID = IDNews
+	res := nu.newsData.Update(IDNews, updateData)
+	if res.ID == 0 {
+		return domain.News{}, errors.New("error update news")
+	}
+
+	return res, nil
+}
+
+func (nu *newsUseCase) DelNews(IDNews int) (bool, error) {
+	res := nu.newsData.Delete(IDNews)
+
+	if !res {
+		return false, errors.New("failed delete")
+	}
+
+	return true, nil
+}
+
 // func (nu *newsUseCase) GetAllN() ([]domain.News, error) {
 // 	res := nu.newsData.GetAll()
 
@@ -51,27 +75,4 @@ func (nu *newsUseCase) AddNews(IDUser int, newNews domain.News) (domain.News, er
 
 // 	return res, nil
 
-// }
-
-// func (nu *newsUseCase) DelNews(IDNews int) (bool, error) {
-// 	res := nu.data.Delete(IDNews)
-
-// 	if !res {
-// 		return false, errors.New("failed delete")
-// 	}
-
-// 	return true, nil
-// }
-
-// func (nu *newsUseCase) UpNews(IDNews int, updateData domain.News) (domain.News, error) {
-// 	if IDNews == -1 {
-// 		return domain.News{}, errors.New("invalid news")
-// 	}
-
-// 	res := nu.data.Update(IDNews, updateData)
-// 	if res.ID == 0 {
-// 		return domain.News{}, errors.New("error update news")
-// 	}
-
-// 	return res, nil
 // }
