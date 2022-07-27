@@ -5,33 +5,33 @@ import (
 	"socialmedia-app/domain"
 )
 
-type newsUseCase struct {
-	data domain.NewsData
+type commentsUseCase struct {
+	data domain.CommentsData
 }
 
-func New(model domain.NewsData) domain.NewsUseCase {
-	return &newsUseCase{
+func New(model domain.CommentsData) domain.CommentsUseCase {
+	return &commentsUseCase{
 		data: model,
 	}
 }
 
-func (nu *newsUseCase) AddNews(IDUser int, newNews domain.News) (domain.News, error) {
+func (cu *commentsUseCase) AddComments(IDUser int, newComments domain.Comments) (domain.Comments, error) {
 	if IDUser == -1 {
-		return domain.News{}, errors.New("invalid user")
+		return domain.Comments{}, errors.New("invalid user")
 	}
 
-	newNews.Pemilik = IDUser
+	newComments.Pemilik = IDUser
 
-	res := nu.data.Insert(newNews)
+	res := cu.data.Insert(newComments)
 	if res.ID == 0 {
-		return domain.News{}, errors.New("error insert news")
+		return domain.Comments{}, errors.New("error insert news")
 	}
 
 	return res, nil
 }
 
-func (nu *newsUseCase) GetAllN() ([]domain.News, error) {
-	res := nu.data.GetAll()
+func (cu *commentsUseCase) GetAllC() ([]domain.Comments, error) {
+	res := cu.data.GetAll()
 
 	if len(res) == 0 {
 		return nil, errors.New("no data found")
@@ -40,20 +40,20 @@ func (nu *newsUseCase) GetAllN() ([]domain.News, error) {
 	return res, nil
 }
 
-func (nu *newsUseCase) GetMyN(IDUser int) ([]domain.News, error) {
+func (cu *commentsUseCase) GetMyC(IDUser int) ([]domain.Comments, error) {
 
 	if IDUser == -1 {
 		return nil, errors.New("invalid user")
 	}
 
-	res := nu.data.GetMy(IDUser)
+	res := cu.data.GetMy(IDUser)
 
 	return res, nil
 
 }
 
-func (nu *newsUseCase) DelNews(IDNews int) (bool, error) {
-	res := nu.data.Delete(IDNews)
+func (cu *commentsUseCase) DelComments(IDComments int) (bool, error) {
+	res := cu.data.Delete(IDComments)
 
 	if !res {
 		return false, errors.New("failed delete")

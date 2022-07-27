@@ -7,19 +7,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type newsData struct {
+type commentsData struct {
 	db *gorm.DB
 }
 
-func New(db *gorm.DB) domain.NewsData {
-	return &newsData{
+func New(db *gorm.DB) domain.CommentsData {
+	return &commentsData{
 		db: db,
 	}
 }
 
-func (nd *newsData) GetAll() []domain.News {
-	var data []News
-	err := nd.db.Find(&data)
+func (cd *commentsData) GetAll() []domain.Comments {
+	var data []Comments
+	err := cd.db.Find(&data)
 
 	if err.Error != nil {
 		log.Println("error on select data", err.Error.Error())
@@ -29,9 +29,9 @@ func (nd *newsData) GetAll() []domain.News {
 	return ParseToArrDomain(data)
 }
 
-func (nd *newsData) GetMy(userID int) []domain.News {
-	var data []News
-	err := nd.db.Where("Pemilik = ?", userID).Find(&data)
+func (cd *commentsData) GetMy(userID int) []domain.Comments {
+	var data []Comments
+	err := cd.db.Where("Pemilik = ?", userID).Find(&data)
 
 	if err.Error != nil {
 		log.Println("There is problem with data", err.Error.Error())
@@ -40,19 +40,19 @@ func (nd *newsData) GetMy(userID int) []domain.News {
 	return ParseToArrDomain(data)
 }
 
-func (nd *newsData) Insert(newNews domain.News) domain.News {
-	cnv := ToLocal(newNews)
-	err := nd.db.Create(&cnv)
+func (cd *commentsData) Insert(newComment domain.Comments) domain.Comments {
+	cnv := ToLocal(newComment)
+	err := cd.db.Create(&cnv)
 	if err.Error != nil {
 		log.Println("Cannot insert data", err.Error.Error())
-		return domain.News{}
+		return domain.Comments{}
 	}
 
 	return cnv.ToDomain()
 }
 
-func (nd *newsData) Delete(newsID int) bool {
-	err := nd.db.Where("ID = ?", newsID).Delete(&News{})
+func (cd *commentsData) Delete(CommentID int) bool {
+	err := cd.db.Where("ID = ?", CommentID).Delete(&Comments{})
 	if err.Error != nil {
 		log.Println("Cannot delete data", err.Error.Error())
 		return false
