@@ -13,6 +13,7 @@ type News struct {
 	FileAttachment string
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
+	DeletedAt      time.Time
 	UserID         int
 	User           User
 }

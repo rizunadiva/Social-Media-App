@@ -7,7 +7,6 @@ import (
 	"socialmedia-app/domain"
 	"socialmedia-app/feature/common"
 	"strconv"
-	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -104,22 +103,29 @@ func (nh *newsHandler) UpdateNews() echo.HandlerFunc {
 
 func (nh *newsHandler) DeleteNews() echo.HandlerFunc {
 	return func(c echo.Context) error {
-
+		// qry := map[string]interface{}{}
 		cnv, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			log.Println("Cannot convert to int", err.Error())
 			return c.JSON(http.StatusInternalServerError, "cannot convert id")
 		}
+		// cnv, err := strconv.Atoi(c.Param("id"))
+		// if err != nil {
+		// 	log.Println("Cannot convert to int", err.Error())
+		// 	return c.JSON(http.StatusInternalServerError, "cannot convert id")
+		// }
 
 		data, err := nh.newsUsecase.DelNews(cnv)
-
 		if err != nil {
-			if strings.Contains(err.Error(), "not found") {
-				return c.JSON(http.StatusNotFound, err.Error())
-			} else {
-				return c.JSON(http.StatusInternalServerError, err.Error())
-			}
+			return c.JSON(http.StatusInternalServerError, "cannot delete user")
 		}
+		// if err != nil {
+		// 	if strings.Contains(err.Error(), "not found") {
+		// 		return c.JSON(http.StatusNotFound, err.Error())
+		// 	} else {
+		// 		return c.JSON(http.StatusInternalServerError, err.Error())
+		// 	}
+		// }
 
 		if !data {
 			return c.JSON(http.StatusInternalServerError, "cannot delete")
