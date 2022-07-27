@@ -2,6 +2,7 @@ package data
 
 import (
 	"socialmedia-app/domain"
+
 	// "socialmedia-app/feature/news/data"
 
 	"gorm.io/gorm"

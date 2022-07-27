@@ -1,14 +1,13 @@
 package delivery
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"socialmedia-app/domain"
 	"socialmedia-app/feature/common"
-	"strconv"
-	"strings"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type newsHandler struct {
@@ -31,6 +30,9 @@ func (nh *newsHandler) InsertNews() echo.HandlerFunc {
 			c.JSON(http.StatusBadRequest, "error read input")
 		}
 
+		fmt.Println(tmp)
+
+		var userid = common.ExtractData(c)
 		data, err := nh.newsUsecase.AddNews(common.ExtractData(c), tmp.ToDomain())
 
 		if err != nil {
@@ -38,113 +40,115 @@ func (nh *newsHandler) InsertNews() echo.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err)
 		}
 
+		fmt.Println(userid)
+
 		return c.JSON(http.StatusCreated, map[string]interface{}{
 			"message": "success create data",
-			"data":    data,
+			"data":    FromDomain(data),
 		})
 
 	}
 }
 
-func (nh *newsHandler) GetAllBook() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		data, err := nh.newsUsecase.GetAllN()
+// func (nh *newsHandler) GetAllNews() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		data, err := nh.newsUsecase.GetAllN()
 
-		if err != nil {
-			log.Println("Cannot get data", err)
-			c.JSON(http.StatusBadRequest, "error read input")
-		}
+// 		if err != nil {
+// 			log.Println("Cannot get data", err)
+// 			c.JSON(http.StatusBadRequest, "error read input")
+// 		}
 
-		if data == nil {
-			log.Println("Terdapat error saat mengambil data")
-			return c.JSON(http.StatusInternalServerError, "Problem from database")
-		}
+// 		if data == nil {
+// 			log.Println("Terdapat error saat mengambil data")
+// 			return c.JSON(http.StatusInternalServerError, "Problem from database")
+// 		}
 
-		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message": "success get all news",
-			"users":   data,
-		})
-	}
-}
+// 		return c.JSON(http.StatusOK, map[string]interface{}{
+// 			"message": "success get all news",
+// 			"users":   data,
+// 		})
+// 	}
+// }
 
-func (bh *newsHandler) GetMyNews() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		data, err := bh.newsUsecase.GetMyN(common.ExtractData(c))
+// func (bh *newsHandler) GetMyNews() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		data, err := bh.newsUsecase.GetMyN(common.ExtractData(c))
 
-		if err != nil {
-			log.Println("Cannot get data", err)
-			c.JSON(http.StatusBadRequest, "error read input")
-		}
+// 		if err != nil {
+// 			log.Println("Cannot get data", err)
+// 			c.JSON(http.StatusBadRequest, "error read input")
+// 		}
 
-		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message": "success get my news",
-			"users":   data,
-		})
-	}
-}
-func (nh *newsHandler) DeleteNews() echo.HandlerFunc {
-	return func(c echo.Context) error {
+// 		return c.JSON(http.StatusOK, map[string]interface{}{
+// 			"message": "success get my news",
+// 			"users":   data,
+// 		})
+// 	}
+// }
+// func (nh *newsHandler) DeleteNews() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
 
-		cnv, err := strconv.Atoi(c.Param("id"))
-		if err != nil {
-			log.Println("Cannot convert to int", err.Error())
-			return c.JSON(http.StatusInternalServerError, "cannot convert id")
-		}
+// 		cnv, err := strconv.Atoi(c.Param("id"))
+// 		if err != nil {
+// 			log.Println("Cannot convert to int", err.Error())
+// 			return c.JSON(http.StatusInternalServerError, "cannot convert id")
+// 		}
 
-		data, err := nh.newsUsecase.DelNews(cnv)
+// 		data, err := nh.newsUsecase.DelNews(cnv)
 
-		if err != nil {
-			if strings.Contains(err.Error(), "not found") {
-				return c.JSON(http.StatusNotFound, err.Error())
-			} else {
-				return c.JSON(http.StatusInternalServerError, err.Error())
-			}
-		}
+// 		if err != nil {
+// 			if strings.Contains(err.Error(), "not found") {
+// 				return c.JSON(http.StatusNotFound, err.Error())
+// 			} else {
+// 				return c.JSON(http.StatusInternalServerError, err.Error())
+// 			}
+// 		}
 
-		if !data {
-			return c.JSON(http.StatusInternalServerError, "cannot delete")
-		}
+// 		if !data {
+// 			return c.JSON(http.StatusInternalServerError, "cannot delete")
+// 		}
 
-		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message": "success delete news",
-		})
-	}
-}
+// 		return c.JSON(http.StatusOK, map[string]interface{}{
+// 			"message": "success delete news",
+// 		})
+// 	}
+// }
 
-func (nh *newsHandler) UpdateNews() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		qry := map[string]interface{}{}
-		cnv, err := strconv.Atoi(c.Param("id"))
-		if err != nil {
-			log.Println("Cannot convert to int", err.Error())
-			return c.JSON(http.StatusInternalServerError, "cannot convert id")
-		}
+// func (nh *newsHandler) UpdateNews() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		qry := map[string]interface{}{}
+// 		cnv, err := strconv.Atoi(c.Param("id"))
+// 		if err != nil {
+// 			log.Println("Cannot convert to int", err.Error())
+// 			return c.JSON(http.StatusInternalServerError, "cannot convert id")
+// 		}
 
-		var tmp NewsInsertRequest
-		res := c.Bind(&tmp)
+// 		var tmp NewsInsertRequest
+// 		res := c.Bind(&tmp)
 
-		if res != nil {
-			log.Println("Cannot parse data", err)
-			c.JSON(http.StatusBadRequest, "error read input")
-		}
+// 		if res != nil {
+// 			log.Println("Cannot parse data", err)
+// 			c.JSON(http.StatusBadRequest, "error read input")
+// 		}
 
-		if tmp.Content != "" {
-			qry["Content"] = tmp.Content
-		}
+// 		if tmp.Content != "" {
+// 			qry["Content"] = tmp.Content
+// 		}
 
-		data, err := nh.newsUsecase.UpNews(cnv, tmp.ToDomain())
+// 		data, err := nh.newsUsecase.UpNews(cnv, tmp.ToDomain())
 
-		if err != nil {
-			log.Println("Cannot update data", err)
-			c.JSON(http.StatusInternalServerError, err)
-		}
+// 		if err != nil {
+// 			log.Println("Cannot update data", err)
+// 			c.JSON(http.StatusInternalServerError, err)
+// 		}
 
-		return c.JSON(http.StatusCreated, map[string]interface{}{
-			"message": "success update data",
-			"ID":      data.ID,
-			"Content": data.Content,
-			"Images":  data.Images,
-			"Pemilik": common.ExtractData(c),
-		})
-	}
-}
+// 		return c.JSON(http.StatusCreated, map[string]interface{}{
+// 			"message":  "success update data",
+// 			"ID":       data.ID,
+// 			"Content":  data.Content,
+// 			"Images":   data.Images,
+// 			"PostedBy": common.ExtractData(c),
+// 		})
+// 	}
+// }
