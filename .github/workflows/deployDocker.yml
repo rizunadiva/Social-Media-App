@@ -27,4 +27,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: rizunadiva/project2:latest
+          tags:  ${{ secrets.DOCKERHUB_USERNAME }}/project2:latest
