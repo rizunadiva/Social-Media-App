@@ -56,25 +56,14 @@ func (nd *newsData) Delete(newsID int) bool {
 	return true
 }
 
-// func (nd *newsData) GetAll() []domain.News {
-// 	var data []News
-// 	err := nd.db.Find(&data)
+func (nd *newsData) GetAll() []domain.News {
+	var data []News
+	err := nd.db.Find(&data)
 
-// 	if err.Error != nil {
-// 		log.Println("error on select data", err.Error.Error())
-// 		return nil
-// 	}
+	if err.Error != nil {
+		log.Println("error on select data", err.Error.Error())
+		return nil
+	}
 
-// 	return ParseToArr(data)
-// }
-
-// func (nd *newsData) GetMy(userID int) []domain.News {
-// 	var data []News
-// 	err := nd.db.Where("PostedBy = ?", userID).Find(&data)
-
-// 	if err.Error != nil {
-// 		log.Println("There is problem with data", err.Error.Error())
-// 		return nil
-// 	}
-// 	return ParseToArrDomain(data)
-// }
+	return ParseToArr(data)
+}

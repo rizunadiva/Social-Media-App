@@ -64,11 +64,6 @@ func (nh *newsHandler) UpdateNews() echo.HandlerFunc {
 		var tmp NewsInsertRequest
 		res := c.Bind(&tmp)
 
-		// idNews := common.ExtractData(c)
-
-		// if idNews == 0 {
-		// 	return c.JSON(http.StatusBadRequest, "unauthorized")
-		// }
 		if res != nil {
 			log.Println(res, "Cannot parse data")
 			return c.JSON(http.StatusInternalServerError, "error read update")
@@ -103,29 +98,17 @@ func (nh *newsHandler) UpdateNews() echo.HandlerFunc {
 
 func (nh *newsHandler) DeleteNews() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// qry := map[string]interface{}{}
+
 		cnv, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			log.Println("Cannot convert to int", err.Error())
 			return c.JSON(http.StatusInternalServerError, "cannot convert id")
 		}
-		// cnv, err := strconv.Atoi(c.Param("id"))
-		// if err != nil {
-		// 	log.Println("Cannot convert to int", err.Error())
-		// 	return c.JSON(http.StatusInternalServerError, "cannot convert id")
-		// }
 
 		data, err := nh.newsUsecase.DelNews(cnv)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "cannot delete user")
 		}
-		// if err != nil {
-		// 	if strings.Contains(err.Error(), "not found") {
-		// 		return c.JSON(http.StatusNotFound, err.Error())
-		// 	} else {
-		// 		return c.JSON(http.StatusInternalServerError, err.Error())
-		// 	}
-		// }
 
 		if !data {
 			return c.JSON(http.StatusInternalServerError, "cannot delete")
@@ -137,39 +120,23 @@ func (nh *newsHandler) DeleteNews() echo.HandlerFunc {
 	}
 }
 
-// func (nh *newsHandler) GetAllNews() echo.HandlerFunc {
-// 	return func(c echo.Context) error {
-// 		data, err := nh.newsUsecase.GetAllN()
+func (nh *newsHandler) GetAllNews() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		data, err := nh.newsUsecase.GetAllN()
 
-// 		if err != nil {
-// 			log.Println("Cannot get data", err)
-// 			c.JSON(http.StatusBadRequest, "error read input")
-// 		}
+		if err != nil {
+			log.Println("Cannot get data", err)
+			c.JSON(http.StatusBadRequest, "error read input")
+		}
 
-// 		if data == nil {
-// 			log.Println("Terdapat error saat mengambil data")
-// 			return c.JSON(http.StatusInternalServerError, "Problem from database")
-// 		}
+		if data == nil {
+			log.Println("Terdapat error saat mengambil data")
+			return c.JSON(http.StatusInternalServerError, "Problem from database")
+		}
 
-// 		return c.JSON(http.StatusOK, map[string]interface{}{
-// 			"message": "success get all news",
-// 			"users":   data,
-// 		})
-// 	}
-// }
-
-// func (bh *newsHandler) GetMyNews() echo.HandlerFunc {
-// 	return func(c echo.Context) error {
-// 		data, err := bh.newsUsecase.GetMyN(common.ExtractData(c))
-
-// 		if err != nil {
-// 			log.Println("Cannot get data", err)
-// 			c.JSON(http.StatusBadRequest, "error read input")
-// 		}
-
-// 		return c.JSON(http.StatusOK, map[string]interface{}{
-// 			"message": "success get my news",
-// 			"users":   data,
-// 		})
-// 	}
-// }
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success get all news",
+			"users":   data,
+		})
+	}
+}
