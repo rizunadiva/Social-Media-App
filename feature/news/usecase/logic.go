@@ -55,24 +55,12 @@ func (nu *newsUseCase) DelNews(IDNews int) (bool, error) {
 	return true, nil
 }
 
-// func (nu *newsUseCase) GetAllN() ([]domain.News, error) {
-// 	res := nu.newsData.GetAll()
+func (nu *newsUseCase) GetAllN() ([]domain.News, error) {
+	res := nu.newsData.GetAll()
 
-// 	if len(res) == 0 {
-// 		return nil, errors.New("no data found")
-// 	}
+	if len(res) == 0 {
+		return nil, errors.New("no data found")
+	}
 
-// 	return res, nil
-// }
-
-// func (nu *newsUseCase) GetMyN(IDUser int) ([]domain.News, error) {
-
-// 	if IDUser == -1 {
-// 		return nil, errors.New("invalid user")
-// 	}
-
-// 	res := nu.data.GetMy(IDUser)
-
-// 	return res, nil
-
-// }
+	return res, nil
+}
