@@ -1,10 +1,8 @@
-name: AWS_DEPLOYMENT
-
-# Controls when the workflow will run
+name: Deploy to aws
 on:
-  pull_request_target:
-    types: ["closed"]
-    branches: [ "main" ]
+  push:
+    branches:
+      - main
 
 jobs:
   build:
