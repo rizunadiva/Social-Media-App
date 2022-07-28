@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"socialmedia-app/config"
+	commentsData "socialmedia-app/feature/comment/data"
 	newsData "socialmedia-app/feature/news/data"
 	userData "socialmedia-app/feature/user/data"
 
@@ -24,4 +25,5 @@ func InitDB(cfg *config.AppConfig) *gorm.DB {
 func MigrateData(db *gorm.DB) {
 	db.AutoMigrate(userData.User{})
 	db.AutoMigrate(newsData.News{})
+	db.AutoMigrate(commentsData.Comments{})
 }

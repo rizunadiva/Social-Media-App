@@ -20,6 +20,11 @@ func New(e *echo.Echo, us domain.UserUseCase) {
 	handler := &userHandler{
 		userUsecase: us,
 	}
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
+		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+	}))
 	e.POST("/users", handler.InsertUser())
 	e.POST("/login", handler.LogUser())
 	e.GET("/profile", handler.GetProfile(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))

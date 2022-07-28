@@ -3,7 +3,7 @@ package domain
 import (
 	"time"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type Comments struct {
@@ -12,7 +12,7 @@ type Comments struct {
 	CreatedAt time.Time
 	DeletedAt time.Time
 	NewsID    int
-	News      News
+	// News      News
 }
 
 type CommentsHandler interface {
@@ -22,13 +22,13 @@ type CommentsHandler interface {
 }
 
 type CommentsUseCase interface {
+	AddComments(IDNews int, newComments Comments) (Comments, error)
 	GetAllC() ([]Comments, error)
-	AddComments(IDUser int, newComments Comments) (Comments, error)
 	DelComments(IDComments int) (bool, error)
 }
 
 type CommentsData interface {
+	Insert(newComment Comments) Comments
 	GetAll() []Comments
-	Insert(newComments Comments) Comments
 	Delete(IDComments int) bool
 }
