@@ -64,3 +64,12 @@ func (nu *newsUseCase) GetAllN() ([]domain.News, error) {
 
 	return res, nil
 }
+
+func (nu *newsUseCase) GetSpecificNews(newsID int) ([]domain.News, error) {
+	res := nu.newsData.GetNewsID(newsID)
+	if newsID == -1 {
+		return nil, errors.New("error update news")
+	}
+
+	return res, nil
+}

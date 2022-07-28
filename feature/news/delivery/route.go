@@ -21,4 +21,5 @@ func RouteBook(e *echo.Echo, bc domain.NewsHandler) {
 	e.PUT("/news/:id", bc.UpdateNews(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))
 	e.DELETE("/news/:id", bc.DeleteNews(), middleware.JWTWithConfig(common.UseJWT([]byte(config.SECRET))))
 	e.GET("/news", bc.GetAllNews())
+	e.GET("/news/:id", bc.GetNewsID())
 }

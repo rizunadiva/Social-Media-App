@@ -7,6 +7,7 @@ type NewsInsertRequest struct {
 	Images         string `json:"images" form:"images"`
 	FileAttachment string `json:"file" form:"file"`
 	UserId         uint   `json:"user_id" form:"user_id"`
+	Username       string `json:"username" form:"username"`
 }
 
 func (ni *NewsInsertRequest) ToDomain() domain.News {

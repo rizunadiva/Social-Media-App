@@ -126,7 +126,8 @@ func (nh *newsHandler) GetAllNews() echo.HandlerFunc {
 
 		if err != nil {
 			log.Println("Cannot get data", err)
-			c.JSON(http.StatusBadRequest, "error read input")
+			return c.JSON(http.StatusBadRequest, "error read input")
+
 		}
 
 		if data == nil {
@@ -136,6 +137,23 @@ func (nh *newsHandler) GetAllNews() echo.HandlerFunc {
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "success get all news",
+			"users":   data,
+		})
+	}
+}
+
+func (nh *newsHandler) GetNewsID() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		idNews := c.Param("id")
+		id, _ := strconv.Atoi(idNews)
+		data, err := nh.newsUsecase.GetSpecificNews(id)
+
+		if err != nil {
+			log.Println("Cannot get data", err)
+			return c.JSON(http.StatusBadRequest, "cannot read input")
+		}
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success get my news",
 			"users":   data,
 		})
 	}

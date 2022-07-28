@@ -15,7 +15,7 @@ type News struct {
 	UpdatedAt      time.Time
 	DeletedAt      time.Time
 	UserID         int
-	User           User
+	// User           User
 }
 
 type NewsHandler interface {
@@ -23,6 +23,7 @@ type NewsHandler interface {
 	UpdateNews() echo.HandlerFunc
 	DeleteNews() echo.HandlerFunc
 	GetAllNews() echo.HandlerFunc
+	GetNewsID() echo.HandlerFunc
 }
 
 type NewsUseCase interface {
@@ -30,6 +31,7 @@ type NewsUseCase interface {
 	UpNews(IDNews int, updateData News) (News, error)
 	DelNews(IDNews int) (bool, error)
 	GetAllN() ([]News, error)
+	GetSpecificNews(newsID int) ([]News, error)
 }
 
 type NewsData interface {
@@ -37,4 +39,5 @@ type NewsData interface {
 	Update(IDNews int, updatedNews News) News
 	Delete(IDNews int) bool
 	GetAll() []News
+	GetNewsID(newsID int) []News
 }

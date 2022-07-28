@@ -67,3 +67,14 @@ func (nd *newsData) GetAll() []domain.News {
 
 	return ParseToArr(data)
 }
+
+func (nd *newsData) GetNewsID(newsID int) []domain.News {
+	var data []News
+	err := nd.db.Where("ID = ?", newsID).First(&data)
+
+	if err.Error != nil {
+		log.Println("problem data", err.Error.Error())
+		return nil
+	}
+	return ParseToArr(data)
+}

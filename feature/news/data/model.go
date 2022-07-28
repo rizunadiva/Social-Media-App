@@ -12,7 +12,7 @@ type News struct {
 	Images         string `json:"images" form:"images"`
 	FileAttachment string `json:"file" form:"file"`
 	UserID         uint   `json:"user_id" form:"user_id"`
-	User           User
+	// User           User
 }
 
 // type User struct {
@@ -41,10 +41,10 @@ func (b *News) ToDomain() domain.News {
 		// DeletedAt:      b.DeletedAt,
 		// PostedBy:       int(b.PostedBy),
 		UserID: int(b.UserID),
-		User: domain.User{
-			ID:       int(b.User.ID),
-			UserName: b.User.Username,
-		},
+		// User: domain.User{
+		// 	ID:       int(b.User.ID),
+		// 	UserName: b.User.Username,
+		// },
 	}
 }
 
