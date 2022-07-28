@@ -3,7 +3,7 @@ package domain
 import (
 	"time"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type News struct {
@@ -13,29 +13,28 @@ type News struct {
 	FileAttachment string
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
-	Pemilik        User
+	DeletedAt      time.Time
+	UserID         int
+	User           User
 }
 
 type NewsHandler interface {
 	InsertNews() echo.HandlerFunc
-	DeleteNews() echo.HandlerFunc
 	UpdateNews() echo.HandlerFunc
+	DeleteNews() echo.HandlerFunc
 	GetAllNews() echo.HandlerFunc
-	GetMyNews() echo.HandlerFunc
 }
 
 type NewsUseCase interface {
-	GetAllN() ([]News, error)
-	GetMyN(IDUser int) ([]News, error)
-	AddNews(IDUser int, newNews News) (News, error)
-	DelNews(IDNews int) (bool, error)
+	AddNews(IDUser int, useNews News) (News, error)
 	UpNews(IDNews int, updateData News) (News, error)
+	DelNews(IDNews int) (bool, error)
+	GetAllN() ([]News, error)
 }
 
 type NewsData interface {
-	GetAll() []News
-	GetMy(IDUser int) []News
-	Insert(newNews News) News
-	Delete(IDNews int) bool
+	Insert(insertNews News) News
 	Update(IDNews int, updatedNews News) News
+	Delete(IDNews int) bool
+	GetAll() []News
 }

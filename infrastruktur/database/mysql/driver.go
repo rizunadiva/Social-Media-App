@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"socialmedia-app/config"
+	newsData "socialmedia-app/feature/news/data"
 	userData "socialmedia-app/feature/user/data"
 
 	"gorm.io/driver/mysql"
@@ -22,5 +23,5 @@ func InitDB(cfg *config.AppConfig) *gorm.DB {
 
 func MigrateData(db *gorm.DB) {
 	db.AutoMigrate(userData.User{})
-	// db.AutoMigrate(data.News{})
+	db.AutoMigrate(newsData.News{})
 }

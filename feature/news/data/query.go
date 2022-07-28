@@ -1,7 +1,10 @@
 package data
 
 import (
+	"fmt"
 	"log"
+
+	// "log"
 	"socialmedia-app/domain"
 
 	"gorm.io/gorm"
@@ -17,37 +20,26 @@ func New(db *gorm.DB) domain.NewsData {
 	}
 }
 
-func (nd *newsData) GetAll() []domain.News {
-	var data []News
-	err := nd.db.Find(&data)
-
-	if err.Error != nil {
-		log.Println("error on select data", err.Error.Error())
-		return nil
-	}
-
-	return ParseToArrDomain(data)
-}
-
-func (nd *newsData) GetMy(userID int) []domain.News {
-	var data []News
-	err := nd.db.Where("Pemilik = ?", userID).Find(&data)
-
-	if err.Error != nil {
-		log.Println("There is problem with data", err.Error.Error())
-		return nil
-	}
-	return ParseToArrDomain(data)
-}
-
-func (nd *newsData) Insert(newNews domain.News) domain.News {
-	cnv := ToLocal(newNews)
+func (nd *newsData) Insert(dataNews domain.News) domain.News {
+	// fmt.Println("data :", dataNews)
+	cnv := ToLocal(dataNews)
+	// fmt.Println("cnv", cnv)
 	err := nd.db.Create(&cnv)
+	fmt.Println("error", err.Error)
 	if err.Error != nil {
-		log.Println("Cannot insert data", err.Error.Error())
 		return domain.News{}
 	}
+	return cnv.ToDomain()
+}
 
+func (bd *newsData) Update(newsID int, updatedNews domain.News) domain.News {
+	cnv := ToLocal(updatedNews)
+	err := bd.db.Model(cnv).Where("ID = ?", newsID).Updates(updatedNews)
+	if err.Error != nil {
+		log.Println("Cannot update data", err.Error.Error())
+		return domain.News{}
+	}
+	cnv.ID = uint(newsID)
 	return cnv.ToDomain()
 }
 
@@ -64,13 +56,14 @@ func (nd *newsData) Delete(newsID int) bool {
 	return true
 }
 
-func (bd *newsData) Update(newsID int, updatedNews domain.News) domain.News {
-	cnv := ToLocal(updatedNews)
-	err := bd.db.Model(&cnv).Where("ID = ?", newsID).Updates(updatedNews)
+func (nd *newsData) GetAll() []domain.News {
+	var data []News
+	err := nd.db.Find(&data)
+
 	if err.Error != nil {
-		log.Println("Cannot update data", err.Error.Error())
-		return domain.News{}
+		log.Println("error on select data", err.Error.Error())
+		return nil
 	}
-	cnv.ID = uint(newsID)
-	return cnv.ToDomain()
+
+	return ParseToArr(data)
 }
