@@ -17,12 +17,12 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          # port: ${{ secrets.PORT }}
-          port: 22
+          port: ${{ secrets.PORT }}
           script: |
-            cd /home/Alta-Project2-Group5
+            cd /home/Social-Media-App-Group-5
             git pull origin main
             docker stop project2Container
             docker rm project2Container
+            docker rmi appklp5
             docker build -t appklp5:latest .
-            docker run -d -p 80:5000 -e DB_Username=${{ secrets.DB_USERNAME }} -e DB_Password=${{ secrets.DB_PASSWORD }} -e DB_Port=${{ secrets.DB_PORT }} -e DB_Host=${{ secrets.DB_HOST }} -e DB_Name=${{ secrets.DB_NAME }} --name project2Container appklp5:latest
+            docker run -d -p 80:80 --name project2Container appklp5:latest
