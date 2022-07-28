@@ -1,8 +1,11 @@
-name: Deploy to AWS EC2
+name: AWS_DEPLOYMENT
+
+# Controls when the workflow will run
 on:
-  push:
-    branches:
-      - main
+  pull_request_target:
+    types: ["closed"]
+    branches: [ "main" ]
+
 jobs:
   build:
     name: Build
@@ -21,5 +24,5 @@ jobs:
             git pull origin main
             docker stop project2Container
             docker rm project2Container
-            docker build -t project2-images:latest .
-            docker run -d -p 80:5000 -e DB_Username=${{ secrets.DB_USERNAME }} -e DB_Password=${{ secrets.DB_PASSWORD }} -e DB_Port=${{ secrets.DB_PORT }} -e DB_Host=${{ secrets.DB_HOST }} -e DB_Name=${{ secrets.DB_NAME }} --name project2Container project2-images:latest
+            docker build -t appklp5:latest .
+            docker run -d -p 80:5000 -e DB_Username=${{ secrets.DB_USERNAME }} -e DB_Password=${{ secrets.DB_PASSWORD }} -e DB_Port=${{ secrets.DB_PORT }} -e DB_Host=${{ secrets.DB_HOST }} -e DB_Name=${{ secrets.DB_NAME }} --name project2Container appklp5:latest
