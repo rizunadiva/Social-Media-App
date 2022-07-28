@@ -17,7 +17,7 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /home/Social-Media-App-Group-5
+            cd /home/ubuntu/Social-Media-App-Group-5
             git pull origin main
             docker stop project2Container
             docker rm project2Container
