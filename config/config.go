@@ -34,12 +34,7 @@ func GetConfig() *AppConfig {
 
 func initConfig() *AppConfig {
 	var defaultConfig AppConfig
-	err := godotenv.Load()
-
-	if err != nil {
-		log.Fatal("Cannot read configuration")
-		return nil
-	}
+	
 	SECRET = os.Getenv("SECRET")
 	cnv, err := strconv.Atoi(os.Getenv("SERVERPORT"))
 	if err != nil {
