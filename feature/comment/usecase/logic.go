@@ -15,12 +15,12 @@ func New(model domain.CommentsData) domain.CommentsUseCase {
 	}
 }
 
-func (cu *commentsUseCase) AddComments(IDUser int, newComments domain.Comments) (domain.Comments, error) {
-	if IDUser == -1 {
+func (cu *commentsUseCase) AddComments(IDNews int, newComments domain.Comments) (domain.Comments, error) {
+	if IDNews == -1 {
 		return domain.Comments{}, errors.New("invalid user")
 	}
 
-	newComments.Pemilik = IDUser
+	newComments.NewsID = IDNews
 
 	res := cu.data.Insert(newComments)
 	if res.ID == 0 {
@@ -40,18 +40,6 @@ func (cu *commentsUseCase) GetAllC() ([]domain.Comments, error) {
 	return res, nil
 }
 
-func (cu *commentsUseCase) GetMyC(IDUser int) ([]domain.Comments, error) {
-
-	if IDUser == -1 {
-		return nil, errors.New("invalid user")
-	}
-
-	res := cu.data.GetMy(IDUser)
-
-	return res, nil
-
-}
-
 func (cu *commentsUseCase) DelComments(IDComments int) (bool, error) {
 	res := cu.data.Delete(IDComments)
 
@@ -61,3 +49,15 @@ func (cu *commentsUseCase) DelComments(IDComments int) (bool, error) {
 
 	return true, nil
 }
+
+// func (cu *commentsUseCase) GetMyC(IDUser int) ([]domain.Comments, error) {
+
+// 	if IDUser == -1 {
+// 		return nil, errors.New("invalid user")
+// 	}
+
+// 	res := cu.data.GetMy(IDUser)
+
+// 	return res, nil
+
+// }

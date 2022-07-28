@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/labstack/echo"
 	"github.com/labstack/echo/v4"
 )
 
@@ -41,7 +40,7 @@ func (cu *commentsHandler) InsertComments() echo.HandlerFunc {
 
 		return c.JSON(http.StatusCreated, map[string]interface{}{
 			"message": "success create data",
-			"data":    data,
+			"data":    FromDomain(data),
 		})
 
 	}
@@ -63,26 +62,11 @@ func (cu *commentsHandler) GetAllComments() echo.HandlerFunc {
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "success get all Comments",
-			"users":   data,
+			"data":    data,
 		})
 	}
 }
 
-func (cu *commentsHandler) GetMyComments() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		data, err := cu.commentsUsecase.GetMyC(common.ExtractData(c))
-
-		if err != nil {
-			log.Println("Cannot get data", err)
-			c.JSON(http.StatusBadRequest, "error read input")
-		}
-
-		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message": "success get my comments",
-			"users":   data,
-		})
-	}
-}
 func (cu *commentsHandler) DeleteComments() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
@@ -111,3 +95,19 @@ func (cu *commentsHandler) DeleteComments() echo.HandlerFunc {
 		})
 	}
 }
+
+// func (cu *commentsHandler) GetMyComments() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		data, err := cu.commentsUsecase.GetMyC(common.ExtractData(c))
+
+// 		if err != nil {
+// 			log.Println("Cannot get data", err)
+// 			c.JSON(http.StatusBadRequest, "error read input")
+// 		}
+
+// 		return c.JSON(http.StatusOK, map[string]interface{}{
+// 			"message": "success get my comments",
+// 			"users":   data,
+// 		})
+// 	}
+// }

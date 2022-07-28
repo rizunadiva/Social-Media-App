@@ -17,6 +17,16 @@ func New(db *gorm.DB) domain.CommentsData {
 	}
 }
 
+func (cd *commentsData) Insert(newComment domain.Comments) domain.Comments {
+	cnv := ToLocal(newComment)
+	err := cd.db.Create(&cnv)
+	if err.Error != nil {
+		log.Println("Cannot insert data")
+		return domain.Comments{}
+	}
+	return cnv.ToDomain()
+}
+
 func (cd *commentsData) GetAll() []domain.Comments {
 	var data []Comments
 	err := cd.db.Find(&data)
@@ -27,28 +37,6 @@ func (cd *commentsData) GetAll() []domain.Comments {
 	}
 
 	return ParseToArrDomain(data)
-}
-
-func (cd *commentsData) GetMy(userID int) []domain.Comments {
-	var data []Comments
-	err := cd.db.Where("Pemilik = ?", userID).Find(&data)
-
-	if err.Error != nil {
-		log.Println("There is problem with data", err.Error.Error())
-		return nil
-	}
-	return ParseToArrDomain(data)
-}
-
-func (cd *commentsData) Insert(newComment domain.Comments) domain.Comments {
-	cnv := ToLocal(newComment)
-	err := cd.db.Create(&cnv)
-	if err.Error != nil {
-		log.Println("Cannot insert data", err.Error.Error())
-		return domain.Comments{}
-	}
-
-	return cnv.ToDomain()
 }
 
 func (cd *commentsData) Delete(CommentID int) bool {
@@ -63,3 +51,14 @@ func (cd *commentsData) Delete(CommentID int) bool {
 	}
 	return true
 }
+
+// func (cd *commentsData) GetMy(userID int) []domain.Comments {
+// 	var data []Comments
+// 	err := cd.db.Where("Pemilik = ?", userID).Find(&data)
+
+// 	if err.Error != nil {
+// 		log.Println("There is problem with data", err.Error.Error())
+// 		return nil
+// 	}
+// 	return ParseToArrDomain(data)
+// }
