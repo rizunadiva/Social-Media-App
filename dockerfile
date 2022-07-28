@@ -1,16 +1,14 @@
 FROM golang:1.18
 
-##buat folder APP
+# create directory app
 RUN mkdir /app
 
-##set direktori utama
+# set or make /app our working directory
 WORKDIR /app
 
-##copy seluruh file ke app
-ADD . /app
+# copy all files to /app
+COPY . .
 
-##buat executeable
-RUN go build -o main .
+RUN go build -o socialmedia5
 
-##jalankan executeable
-CMD ["/app/main"]
+CMD [ "./socialmedia5" ]
