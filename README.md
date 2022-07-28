@@ -14,7 +14,7 @@
   </p>
 </div>
 
-<!-- ABOUT THE PROJECT -->
+<!--- ABOUT THE PROJECT --->
 ### 💻 &nbsp;About The Project
 
    
