@@ -57,11 +57,10 @@ User dapat memposting news sendiri yang bisa dikomentari oleh orang lain. Bebera
 | Feature news | Endpoint | Param | JWT Token | Fungsi |
 | --- | --- | --- | --- | --- |
 | GET | /news  | - | NO | Mendapatkan informasi seluruh news yang ada |
-| GET | /news/:idnews | idnews | NO | Mendapatkan informasi news secara detail melalui id news |
-| GET | /news/mylists | - | YES | Mendapatkan informasi seluruh news user yang ia selenggarakan |
+| GET | /news/:id | idnews | NO | Mendapatkan informasi news secara detail melalui id news |
 | POST | /news | - | YES | YES | Membuat news baru |
-| DELETE | /news/:idnews | idnews | YES | Melakukan delete news yang diselenggarakan oleh user berdasarkan id news |
-| PUT |  /news/:idnews | idnews | YES | Melakukan update news tertentu yang diselenggarakan oleh user berdasarkan id news |
+| DELETE | /news| idnews | YES | Melakukan delete news yang diselenggarakan oleh user berdasarkan id news |
+| PUT |  /news | idnews | YES | Melakukan update news tertentu yang diselenggarakan oleh user berdasarkan id news |
 
 </details>
 
@@ -77,7 +76,7 @@ Comment merupakan fitur dimana user dapat memberikan comment/komentar pada event
 | Feature comment | Endpoint | Param | JWT Token | Fungsi |
 | --- | --- | --- | --- | --- |
 | POST | /comments | - | YES | Memberikan comment/komentar pada event yang ada |
-| GET | /comments/:idEvent | idEvent | YES | Menampilkan comment/komentar yang ada pada suatu event berdasarkan id event |
+| GET | /comments/:id | id | YES | Menampilkan comment/komentar yang ada pada suatu event berdasarkan id event |
 
 </details>
 
